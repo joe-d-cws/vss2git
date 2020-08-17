@@ -15,14 +15,14 @@ namespace VSS2Git
 {
     public partial class Form1 : Form
     {
-        private int checkinGap;
+        private int gapInterval;
         private List<ItemInfo> itemList;
         private List<ItemInfo> projectList;
         private string lastCheckPath = "";
         private string lastChangeDir = "";
         private string extractPath;
         private string logFile;
-        private string remoteRepoBase;
+        private Uri remoteRepoBase;
         private StringBuilder sbStatus;
         private bool testMode;
         private DateTime earliestDate;
@@ -92,7 +92,7 @@ namespace VSS2Git
                                            "ExtractPath={4}\r\n" +
                                            "LogFile={5}\r\n" +
                                            "ReportFile={6}\r\n" +
-                                           "RemoteRepo={7}\r\n",
+                                           "RemoteRepo={7}\r\n" +
                                            "TestMode={8}\r\n",
                                            txtVss.Text, txtSSUser.Text, txtSSPassword.Text, txtSSRoot.Text,
                                            txtExtractPath.Text,
@@ -297,6 +297,15 @@ namespace VSS2Git
             //StatusMessage("Create path: {0}\r\n", pathName);
         }
 
+        private string EncodeItem(string item)
+        {
+            if (String.IsNullOrEmpty(item))
+            {
+                return "";
+            }
+            return item.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;"); ;
+        }
+
         private void DumpItems(string fileName)
         {
             if (String.IsNullOrEmpty(fileName))
@@ -320,10 +329,11 @@ namespace VSS2Git
             {
                 string projectName = item.FindProjectName();
 
-                tr.Write("<TR><TD>{0}</TD><TD>{1}</TD><TD>{2}</TD><TD>{3}</TD><TD>{4}</TD><TD>{5}</TD><TD>{6}</TD><TD>{7}</TD><TD>{8}</TD><TD>{9}</TD><TD>{10}</TD><TD>{11}</TD><TD>{12}</TD></TR>\r\n",
-                                item.ItemType, projectName, item.Parent, item.Physical, item.Spec,
-                                item.VersionNumber, item.VersionDate, item.Action, item.Comment,
-                                item.Name, item.LocalSpec, item.Label, item.LabelComment, item.UserName);
+                tr.Write("<TR><TD>{0}</TD><TD>{1}</TD><TD>{2}</TD><TD>{3}</TD><TD>{4}</TD><TD>{5}</TD><TD>{6}</TD><TD>{7}</TD><TD>{8}</TD><TD>{9}</TD><TD>{10}</TD><TD>{11}</TD><TD>{12}</TD><TD>{13}</TD></TR>\r\n",
+                                EncodeItem(item.ItemType.ToString()), EncodeItem(projectName), EncodeItem(item.Parent), EncodeItem(item.Physical), 
+                                EncodeItem(item.Spec), EncodeItem(item.VersionNumber.ToString()), EncodeItem(item.VersionDate.ToString(DateFormat)), EncodeItem(item.Action),
+                                EncodeItem(item.Comment), EncodeItem(item.Name), EncodeItem(item.LocalSpec), EncodeItem(item.Label), 
+                                EncodeItem(item.LabelComment), EncodeItem(item.UserName) );
             }
             tr.Write("</TABLE>\r\n" +
                          "</BODY>\r\n" +
@@ -381,6 +391,7 @@ namespace VSS2Git
 
             if (!String.IsNullOrEmpty(remoteRepo))
             {
+                StatusMessage("git remote add origin \"{0}\"\r\n", remoteRepo);
                 //RunCommand("git remote add origin remote repository URL");
 
                 // lists remote
@@ -429,11 +440,11 @@ namespace VSS2Git
             {
                 //RunCommand("git push origin master");
             }
-        
+
         }
 
         /// <summary>
-        /// Extract individual file versions, and commit to the new source control
+        /// Extract individual file versions, and commit to git
         /// </summary>
         private void Transfer()
         {
@@ -489,42 +500,127 @@ namespace VSS2Git
                 // were all checked in at the same time.  The longest gap I saw was 10 seconds, 
                 // so we will wait until there's a gap of more than 10 seconds between checkin dates to do the
                 // actual checkin.
-                // (gap interval is in checkinGap)
+                // (gap interval is in gapInterval)
                 if (itemList[i].ItemType != 0)
                 {
-                    if ((commits.Contains(itemList[i].Spec)        // if a previous version is already stanged to commit...
-                        || itemList[i].VersionDate > lastCommit)   // or there's a date gap
-                        && commitCount != 0)                       // and there are items staged to commit
+                    project = itemList[i].FindProject();
+
+                    if (
+                        ( 
+                          (project.Spec != currentProjectName)        // if the project has changed...
+                          || (commits.Contains(itemList[i].Spec))     // or a previous version of this file is already staged to commit...
+                          || (itemList[i].VersionDate > lastCommit)   // or there's a date gap...
+                        ) )
+//                       && commitCount != 0)                       // and there are items staged to commit
                     {
-                        if (itemList[i].VersionDate <= lastCommit)
+                        if (commitCount != 0)
                         {
-                            StatusMessage("********************\r\n");
+                            // there are items to commit
+                            commitDate = lastCommit.ToString(DateFormat);
+                            // checkin time gap found, commit
+                            SetStatusLabel(commitDate);
+                            int checkinGap = Convert.ToInt32((itemList[i].VersionDate - lastCommit).TotalSeconds) + gapInterval;
+                            StatusMessage("Commit {0} items ({1})\r\n", commitCount, commitDate);
+
+                            // print a message saying why we are comitting.
+                            if (project.Spec != currentProjectName)
+                            {
+                                StatusMessage("Project name changed from {0} to {1}\r\n", currentProjectName, project.Spec);
+                            }
+                            else if (commits.Contains(itemList[i].Spec)) 
+                            {
+                                StatusMessage("A version of {0} is already staged to commit.\r\n", itemList[i].Spec);
+                            }
+                            else if (itemList[i].VersionDate > lastCommit)
+                            {
+                                if (checkinGap > gapInterval)
+                                {
+                                    StatusMessage("Checkin gap: {0}\r\n", checkinGap);
+                                }
+                            }
+
+                            commitCount = 0;
+                            checkinCount += 1;
+
+                            GitCommit(currentProjectPath, currentRemoteRepo, commitComment, commitDate);
+
+                            commits.Clear();
+                            commitComment = "";
                         }
-                        commitDate = lastCommit.ToString(DateFormat);
-                        // checkin time gap found, commit
-                        SetStatusLabel(commitDate);
-                        string msg = String.Format("Commit {0} items ({1})\r\nCheckin gap: {2:0000000}\r\n", commitCount, commitDate, (itemList[i].VersionDate - lastCommit).TotalSeconds + checkinGap);
-                        StatusMessage(msg);
-                        commitCount = 0;
-                        checkinCount += 1;
-
-                        GitCommit(currentProjectPath, currentRemoteRepo, commitComment, commitDate);
-
-                        commits.Clear();
-                        commitComment = "";
                         if (itemList[i].VersionDate > latestDate)
                         {
-                            // hit end of list, break
+                            // hit end of list.  We are done.
+                            // break out of loop
                             break;
+                        }
+
+                        if (project.Spec != currentProjectName)
+                        {
+                            // project name has changed.  
+                            if (!project.Created)
+                            {
+                                currentProjectPath = project.Spec.Substring(2);
+
+                                if (!String.IsNullOrEmpty(rootStrip))
+                                {
+                                    if (currentProjectPath.StartsWith(rootStrip))
+                                    {
+                                        currentProjectPath = currentProjectPath.Substring(rootStrip.Length);
+                                    }
+                                    else
+                                    {
+                                        StatusMessage("******************* Unable to strip root path from project path.\r\n");
+                                        throw new Exception("Unable to strip project root path from version " + project.VersionNumber.ToString() + " of " + project.Spec + ".");
+                                    }
+                                }
+
+                                if (remoteRepoBase != null)
+                                {
+                                    currentRemoteRepo = "";
+                                    Uri newUri;
+                                    if (Uri.TryCreate(remoteRepoBase, currentProjectPath + ".git", out newUri))
+                                    {
+                                        currentRemoteRepo = newUri.ToString();
+                                        StatusMessage("New remote repo: {0}\r\n", currentRemoteRepo);
+                                    }
+                                    else
+                                    {
+                                        StatusMessage("******************* Unable to combine remote repo URIs.\r\n");
+                                        throw new Exception("Unable to combine remote repo URIs " + project.VersionNumber.ToString() + " of " + project.Spec + ".");
+                                    }
+
+                                }
+
+                                // strip the $/ from the start of the item spec, and replace / with \
+                                currentProjectPath = Path.Combine(extractPath, currentProjectPath.Replace('/', '\\'));
+
+                                CheckPath(currentProjectPath);
+
+
+                                // run git init 
+
+                                GitInit(currentProjectPath, currentRemoteRepo);
+
+                                project.ProjectPath = currentProjectPath;
+
+                                project.Created = true;
+                            }
+                            else
+                            {
+                                currentProjectPath = project.ProjectPath;
+                            }
+                            currentProjectName = project.Spec;
                         }
                     }
 
                     // set the last commit to "checkinGap" seconds after the current version date.
                     // this becomes the new threshold for the commit check.
-                    lastCommit = itemList[i].VersionDate.AddSeconds(checkinGap);
+                    lastCommit = itemList[i].VersionDate.AddSeconds(gapInterval);
 
+                    // add this item to the list of things that need to be committed
                     commits.Add(itemList[i].Spec);
 
+                    // strip control characters from comment
                     itemComment = FixComment(itemList[i].Comment);
 
                     if (!String.IsNullOrEmpty(itemComment))
@@ -543,70 +639,12 @@ namespace VSS2Git
                         else
                         {
                             StatusMessage("******************* Unable to strip root path.\r\n");
+                            throw new Exception("Unable to strip root path from version " + itemList[i].VersionNumber.ToString() + " of " + itemList[i].Spec + ".");
                         }
                     }
 
                     // strip the $/ from the start of the item spec, and replace / with \
                     itemName = itemName.Replace('/', '\\');
-
-                    project = itemList[i].FindProject();
-                    if (project.Spec != currentProjectName)
-                    {
-                        if (!String.IsNullOrEmpty(currentProjectName))
-                        {
-                            if (commitCount != 0)
-                            {
-                                commitDate = lastCommit.ToString(DateFormat);
-                                // current project has changed.
-                                GitCommit(currentProjectPath, currentRemoteRepo, commitComment, commitDate);
-                            }
-
-                            commitCount = 0;
-                            commits.Clear();
-                            commitComment = "";
-                        }
-
-                        if (!project.Created)
-                        {
-                            currentProjectPath = project.Spec.Substring(2);
-
-                            if (!String.IsNullOrEmpty(rootStrip))
-                            {
-                                if (currentProjectPath.StartsWith(rootStrip))
-                                {
-                                    currentProjectPath = currentProjectPath.Substring(rootStrip.Length);
-                                }
-                                else
-                                {
-                                    StatusMessage("******************* Unable to strip root path from project path.\r\n");
-                                }
-                            }
-
-                            if (!String.IsNullOrEmpty(remoteRepoBase))
-                            {
-                                currentRemoteRepo = remoteRepoBase + currentProjectPath;
-                            }
-
-                            // strip the $/ from the start of the item spec, and replace / with \
-                            currentProjectPath = Path.Combine(extractPath, currentProjectPath.Replace('/', '\\'));
-
-                            CheckPath(currentProjectPath);
-
-
-                            // run git init 
-
-                            GitInit(currentProjectPath, currentRemoteRepo);
-
-                            project.ProjectPath = currentProjectPath;
-
-                            project.Created = true;
-                        }
-                        else
-                        {
-                            currentProjectPath = project.ProjectPath;
-                        }
-                        currentProjectName = project.Spec;
-                    }
 
                     StatusMessage("{0} (ver {1} - {2} {3} {4})\r\n", itemList[i].Spec, itemList[i].VersionNumber, itemList[i].VersionDate, itemList[i].Action ?? "", itemComment);
 
@@ -627,6 +665,8 @@ namespace VSS2Git
 
                     if (newFile)
                     {
+                        // labels are stored in VSS as file items with the name of the directory.
+                        // this check filters them out.
                         isDirectory = Directory.Exists(fileName);
                     }
 
@@ -634,7 +674,7 @@ namespace VSS2Git
                     {
                         // extract the file.
                         // Enclose this in a try/catch block in case the extract fails.
-                        // I've seen this fail if older versions of the file are missing.
+                        // I've seen this fail if older versions of the file are missing in VSS.
                         if (!testMode)
                         {
                             // delete any existing version of the file
@@ -666,6 +706,8 @@ namespace VSS2Git
                             }
 
                             // add changed file
+                            // Note: This git add is not needed, but can be uncommented if you want.
+                            // The program will do a "git add ." before the commit.
                             //GitAdd(currentProjectPath, fileName, itemList[i].Comment ?? "");
                         }
                         commitCount += 1;
@@ -681,8 +723,9 @@ namespace VSS2Git
             SetStatusLabel("Done.");
         }
 
-        public string GetResource(Assembly asm, string resourceName)
+        public string GetResource(string resourceName)
         {
+            Assembly asm = Assembly.GetExecutingAssembly();
             string resName = asm.GetName().Name + "." + resourceName;
             using (Stream s = asm.GetManifestResourceStream(resName))
             {
@@ -701,27 +744,35 @@ namespace VSS2Git
 
         private void DumpVssDatabase()
         {
-            rootPath = txtSSRoot.Text;
-
             Cursor oldCursor = this.Cursor;
-
-            SaveConfig(configFileName);
-
-            gitIgnore = GetResource(Assembly.GetExecutingAssembly(), "gitignore.txt");
 
             try
             {
+                rootPath = txtSSRoot.Text;
+
+                SaveConfig(configFileName);
+
+                gitIgnore = GetResource("gitignore.txt");
+
                 sbStatus = new StringBuilder();
                 lblStatus.Text = "";
                 this.Cursor = Cursors.WaitCursor;
 
                 // get various settings from the UI
                 extractPath = txtExtractPath.Text.Trim();
+                if (!String.IsNullOrEmpty(txtRemote.Text.Trim()))
+                {
+                    remoteRepoBase = new Uri(txtRemote.Text.Trim());
+                }
+                else
+                {
+                    remoteRepoBase = null;
+                }
                 logFile = txtLog.Text.Trim();
                 testMode = chkTest.Checked;
                 earliestDate = DateTime.MaxValue;
                 latestDate = DateTime.MinValue;
-                checkinGap = 10;
+                gapInterval = 10;
                 itemList = new List<ItemInfo>();
                 projectList = new List<ItemInfo>();
                 lastCheckPath = "";
@@ -729,6 +780,14 @@ namespace VSS2Git
 
                 // Make sure the base path exists,
                 CheckPath(extractPath);
+
+                // Make sure base path is empty
+                if (Directory.GetFiles(extractPath).Length != 0 || Directory.GetDirectories(extractPath).Length != 0)
+                {
+                    MessageBox.Show("Extract path " + extractPath + " is not empty.  Clean it out and try again.");
+                    return;
+                }
+
 
                 // Create database instance...
                 IVSSDatabase vssDatabase = new VSSDatabase();
@@ -744,11 +803,12 @@ namespace VSS2Git
 
                 // add a dummy record that will sort to the end
                 ItemInfo item = new ItemInfo();
-                item.VersionDate = latestDate.AddSeconds(checkinGap + 1);
+                item.VersionDate = latestDate.AddSeconds(gapInterval + 1);
                 item.Spec = "~";
                 item.VersionNumber = int.MaxValue;
                 item.ItemType = 1;
                 itemList.Add(item);
+                item.Project = new ItemInfo(vssRoot, vssRoot.VSSVersion);
 
                 // sort all versions by date, name and version
                 itemList.Sort(new ItemInfoComparer());
@@ -778,14 +838,15 @@ namespace VSS2Git
 
         private void btnDump_Click(object sender, EventArgs e)
         {
-            try
-            {
+            //try
+            //{
                 DumpVssDatabase();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.ToString());
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    StatusMessage("{0}\r\n", ExceptionHandler.UnwindExceptions(ex));
+            //    MessageBox.Show(ex.ToString());
+            //}
         }
     }
 }

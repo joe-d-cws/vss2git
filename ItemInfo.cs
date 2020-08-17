@@ -24,10 +24,32 @@ namespace VSS2Git
             LabelComment = vssVersion.LabelComment;
             UserName = vssVersion.Username;
             VSSItem = ver;
+            FileCount = 0;
+            Project = null;
+            ProjectPath = "";
+            Created = false;
         }
 
         public ItemInfo()
         {
+            ItemType = 1;
+            Parent = "";
+            Physical = "";
+            Spec = "";
+            VersionNumber = int.MaxValue;
+            VersionDate = DateTime.MaxValue;
+            Action = "";
+            Comment = "";
+            Name = "";
+            LocalSpec = "";
+            Label = "";
+            LabelComment = "";
+            UserName = "";
+            VSSItem = null;
+            FileCount = 0;
+            Project = null;
+            ProjectPath = "";
+            Created = false;
         }
 
         public ItemInfo FindProject()
@@ -43,6 +65,11 @@ namespace VSS2Git
                 }
 
                 cur = cur.Project;
+            }
+
+            if (result == null)
+            {
+                return this.Project;
             }
 
             return result;
@@ -79,8 +106,6 @@ namespace VSS2Git
         public string ProjectPath { get; set; }
 
         public bool Created { get; set; }
-
-        public int ChildCount { get; set; }
     }
 
     public class ItemInfoComparer : IComparer<ItemInfo>
@@ -103,11 +128,11 @@ namespace VSS2Git
                 return 1;
             }
 
-            result = i1.ItemType.CompareTo(i2.ItemType);
-            if (result != 0)
-            {
-                return result;
-            }
+            //result = i1.ItemType.CompareTo(i2.ItemType);
+            //if (result != 0)
+            //{
+            //    return result;
+            //}
 
             result = i1.VersionDate.CompareTo(i2.VersionDate);
             if (result != 0)
