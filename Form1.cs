@@ -418,7 +418,12 @@ namespace VSS2Git
         {
             try
             {
-                File.Delete(fileName);
+                var dir = new DirectoryInfo(".");
+
+                foreach (var file in dir.EnumerateFiles(fileName))
+                {
+                    file.Delete();
+                }
                 return true;
             }
             catch
