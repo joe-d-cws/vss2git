@@ -16,8 +16,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>vss2git.ico</ApplicationIcon>
     <StartupObject>VSS2Git.Program</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
