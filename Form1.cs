@@ -557,7 +557,7 @@ namespace VSS2Git
                                     }
                                 }
 
-                                string gitRepoName = currentProjectPath.Replace(' ', '-') + ".git";
+                                string gitRepoName = currentProjectPath.Replace(' ', '-').ToLower() + ".git";
                                 gitProjectList.Add(gitRepoName);
 
                                 // strip the $/ from the start of the item spec, and replace / with \
@@ -708,9 +708,8 @@ namespace VSS2Git
                     RunCommand(cmdLine);
                     cmdLine = String.Format("git remote add origin \"{0}\"", pi.Repo);
                     RunCommand(cmdLine);
-                    //RunCommand("git push -u origin --all");
+                    RunCommand("git push -u origin --all");
                     //RunCommand("git push -u origin --tags");
-                    //RunCommand("git push origin master");
                     RunCommand("git status");
                 }
 
