@@ -48,13 +48,11 @@
             this.label17 = new System.Windows.Forms.Label();
             this.txtReport = new System.Windows.Forms.TextBox();
             this.statLabel = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txtRemote = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnDump
             // 
-            this.btnDump.Location = new System.Drawing.Point(10, 211);
+            this.btnDump.Location = new System.Drawing.Point(10, 151);
             this.btnDump.Name = "btnDump";
             this.btnDump.Size = new System.Drawing.Size(68, 24);
             this.btnDump.TabIndex = 12;
@@ -146,17 +144,20 @@
             // 
             // txtStatus
             // 
-            this.txtStatus.Location = new System.Drawing.Point(11, 273);
+            this.txtStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtStatus.Location = new System.Drawing.Point(11, 213);
             this.txtStatus.Multiline = true;
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtStatus.Size = new System.Drawing.Size(796, 180);
+            this.txtStatus.Size = new System.Drawing.Size(729, 282);
             this.txtStatus.TabIndex = 11;
             // 
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(12, 245);
+            this.lblStatus.Location = new System.Drawing.Point(12, 185);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(0, 13);
             this.lblStatus.TabIndex = 26;
@@ -166,7 +167,7 @@
             this.chkTest.AutoSize = true;
             this.chkTest.Checked = true;
             this.chkTest.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkTest.Location = new System.Drawing.Point(95, 216);
+            this.chkTest.Location = new System.Drawing.Point(95, 156);
             this.chkTest.Name = "chkTest";
             this.chkTest.Size = new System.Drawing.Size(47, 17);
             this.chkTest.TabIndex = 13;
@@ -213,29 +214,11 @@
             this.statLabel.Size = new System.Drawing.Size(0, 13);
             this.statLabel.TabIndex = 3;
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(8, 151);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(98, 13);
-            this.label6.TabIndex = 32;
-            this.label6.Text = "Remote Repo URL";
-            // 
-            // txtRemote
-            // 
-            this.txtRemote.Location = new System.Drawing.Point(120, 148);
-            this.txtRemote.Name = "txtRemote";
-            this.txtRemote.Size = new System.Drawing.Size(232, 20);
-            this.txtRemote.TabIndex = 33;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(873, 537);
-            this.Controls.Add(this.txtRemote);
-            this.Controls.Add(this.label6);
+            this.ClientSize = new System.Drawing.Size(752, 507);
             this.Controls.Add(this.txtReport);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.txtLog);
@@ -284,8 +267,6 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox txtReport;
         private System.Windows.Forms.Label statLabel;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox txtRemote;
     }
 }
 
