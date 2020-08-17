@@ -565,12 +565,16 @@ namespace VSS2Git
                                 }
 
                                 string gitRepoName = currentProjectPath.Replace(' ', '-').ToLower() + ".git";
-                                gitProjectList.Add(gitRepoName);  
+                                gitProjectList.Add(gitRepoName);
                                 /// *******
                                 if (!String.IsNullOrEmpty(remoteRepoBase))
                                 {
-                                    currentRemoteRepo = remoteRepoBase + currentProjectPath.Replace(' ', '-') + ".git";
+                                    currentRemoteRepo = remoteRepoBase + gitRepoName;
                                     StatusMessage("New remote repo: {0}\r\n", currentRemoteRepo);
+                                }
+                                else
+                                {
+                                    currentRemoteRepo = gitRepoName;
                                 }
 
                                 // strip the $/ from the start of the item spec, and replace / with \
@@ -581,7 +585,7 @@ namespace VSS2Git
                                 // run git init 
                                 GitInit(currentProjectPath, currentRemoteRepo);
 
-                                cleanup.Add(new ProjectInfo(currentProjectPath, gitRepoName)); //currentRemoteRepo
+                                cleanup.Add(new ProjectInfo(currentProjectPath, gitRepoName, currentRemoteRepo)); 
 
                                 project.ProjectPath = currentProjectPath;
 
@@ -707,7 +711,7 @@ namespace VSS2Git
 
                 RunCommand("git gc");
 
-                if (!String.IsNullOrEmpty(pi.Repo))
+                if (!String.IsNullOrEmpty(pi.RemoteRepo))
                 {
                     //git remote rename origin old - origin
                     //git remote add origin https://whatever.git
@@ -715,13 +719,11 @@ namespace VSS2Git
                     //git push -u origin --tags
 
 
-                    pi.Repo = pi.Repo.Replace(' ', '-');
                     string cmdLine;
-                   //cmdLine = String.Format("git init --bare \"{0}\"", pi.Repo);
+                   //cmdLine = String.Format("git init --bare \"{0}\"", pi.RemoteRepo);
                     //RunCommand(cmdLine);
-                    cmdLine = String.Format("git remote rename origin old-origin", pi.Repo);
-                    RunCommand(cmdLine);
-                    cmdLine = String.Format("git remote add origin \"{0}\"", pi.Repo);
+                    RunCommand("git remote rename origin old-origin");
+                    cmdLine = String.Format("git remote add origin \"{0}\"", pi.RemoteRepo);
                     RunCommand(cmdLine);
                     RunCommand("git push -u origin --all");
                     //RunCommand("git push -u origin --tags");

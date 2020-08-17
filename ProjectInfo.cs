@@ -12,10 +12,13 @@ namespace VSS2Git
 
         public string Repo { get; set; }
 
-        public ProjectInfo(string path, string repo)
+        public string RemoteRepo { get; set; }
+
+        public ProjectInfo(string path, string repo, string remoteRepo)
         {
             Path = path;
             Repo = repo;
+            RemoteRepo = remoteRepo;
         }
     }
 
