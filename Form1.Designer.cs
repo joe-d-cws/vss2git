@@ -277,7 +277,7 @@
             this.Controls.Add(this.btnDump);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "Form1";
-            this.Text = "Dump VSS Database";
+            this.Text = "Convert VSS to Git";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
