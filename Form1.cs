@@ -745,18 +745,25 @@ namespace VSS2Git
                             File.Delete(getName);
                         }
 
-                        try
+                        extracted = false;
+
+                        // don't extract if it's a visual studio source control file
+                        if (!fileName.EndsWith(".vssscc", StringComparison.OrdinalIgnoreCase) &&
+                            !fileName.EndsWith(".vspscc", StringComparison.OrdinalIgnoreCase))
                         {
-                            if (!testMode)
+                            try
                             {
-                                itemList[i].VSSItem.Get(ref getName, (int)VSSFlags.VSSFLAG_CMPFAIL);
+                                if (!testMode)
+                                {
+                                    itemList[i].VSSItem.Get(ref getName, (int)VSSFlags.VSSFLAG_CMPFAIL);
+                                }
+                                extracted = true;
                             }
-                            extracted = true;
-                        }
-                        catch (Exception ex)
-                        {
-                            extracted = false;
-                            StatusMessage("{0} - {1}\r\n", ex.GetType().Name, ex.Message);
+                            catch (Exception ex)
+                            {
+                                extracted = false;
+                                StatusMessage("{0} - {1}\r\n", ex.GetType().Name, ex.Message);
+                            }
                         }
 
                         if (extracted)
@@ -812,7 +819,7 @@ namespace VSS2Git
                         RunCommand(gitRemoteAddOrigin);
                         RunCommand(gitPush);
                     }
-                    else 
+                    else
                     {
                         pushRemoteRepo.AppendFormat("cd \"{0}\"\r\n", pi.Path);
                         pushRemoteRepo.AppendFormat("{0}\r\n", gitRemoteAddOrigin);
