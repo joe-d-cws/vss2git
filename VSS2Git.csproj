@@ -16,7 +16,8 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
-    <ApplicationIcon>vss.ico</ApplicationIcon>
+    <ApplicationIcon>
+    </ApplicationIcon>
     <StartupObject>VSS2Git.Program</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
@@ -112,9 +113,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="vss2git.ico" />
     <EmbeddedResource Include=".gitignore" />
     <Content Include="readme.txt" />
-    <Content Include="vss.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
