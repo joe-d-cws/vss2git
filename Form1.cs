@@ -719,13 +719,13 @@ namespace VSS2Git
                     //git push -u origin --tags
 
 
-                    string cmdLine;
-                   //cmdLine = String.Format("git init --bare \"{0}\"", pi.RemoteRepo);
+                    //string cmdLine;
+                    //cmdLine = String.Format("git remote add origin \"{0}\"", pi.RemoteRepo);
                     //RunCommand(cmdLine);
-                    RunCommand("git remote rename origin old-origin");
-                    cmdLine = String.Format("git remote add origin \"{0}\"", pi.RemoteRepo);
-                    RunCommand(cmdLine);
-                    RunCommand("git push -u origin --all");
+                    //RunCommand("git remote rename origin old-origin");
+                    //cmdLine = String.Format("git remote add origin \"{0}\"", pi.RemoteRepo);
+                    //RunCommand(cmdLine);
+                    //RunCommand("git push -u origin --all");
                     //RunCommand("git push -u origin --tags");
                     RunCommand("git status");
                 }
