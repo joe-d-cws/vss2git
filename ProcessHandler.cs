@@ -233,6 +233,7 @@ namespace VSS2Git
                 process.BeginOutputReadLine();
                 process.BeginErrorReadLine();
 
+
                 if (inputData != null)
                 {
                     foreach (string input in inputData)
