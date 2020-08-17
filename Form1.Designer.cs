@@ -54,6 +54,7 @@
             this.txtRemotePath = new System.Windows.Forms.TextBox();
             this.chkAutoPush = new System.Windows.Forms.CheckBox();
             this.lblProgress = new System.Windows.Forms.Label();
+            this.chkFlatten = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnDump
@@ -254,9 +255,9 @@
             this.chkAutoPush.AutoSize = true;
             this.chkAutoPush.Location = new System.Drawing.Point(370, 66);
             this.chkAutoPush.Name = "chkAutoPush";
-            this.chkAutoPush.Size = new System.Drawing.Size(202, 17);
+            this.chkAutoPush.Size = new System.Drawing.Size(196, 17);
             this.chkAutoPush.TabIndex = 36;
-            this.chkAutoPush.Text = "Push to remote repo when complete?";
+            this.chkAutoPush.Text = "Push to remote repo when complete";
             this.chkAutoPush.UseVisualStyleBackColor = true;
             // 
             // lblProgress
@@ -267,11 +268,22 @@
             this.lblProgress.Size = new System.Drawing.Size(0, 13);
             this.lblProgress.TabIndex = 37;
             // 
+            // chkFlatten
+            // 
+            this.chkFlatten.AutoSize = true;
+            this.chkFlatten.Location = new System.Drawing.Point(370, 94);
+            this.chkFlatten.Name = "chkFlatten";
+            this.chkFlatten.Size = new System.Drawing.Size(58, 17);
+            this.chkFlatten.TabIndex = 38;
+            this.chkFlatten.Text = "Flatten";
+            this.chkFlatten.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(751, 503);
+            this.Controls.Add(this.chkFlatten);
             this.Controls.Add(this.lblProgress);
             this.Controls.Add(this.chkAutoPush);
             this.Controls.Add(this.txtRemotePath);
@@ -333,6 +345,7 @@
         private System.Windows.Forms.TextBox txtRemotePath;
         private System.Windows.Forms.CheckBox chkAutoPush;
         private System.Windows.Forms.Label lblProgress;
+        private System.Windows.Forms.CheckBox chkFlatten;
     }
 }
 
