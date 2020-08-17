@@ -66,11 +66,13 @@
             this.txtReport = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
             this.chkAutoProject = new System.Windows.Forms.CheckBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.txtCmdLog = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnDump
             // 
-            this.btnDump.Location = new System.Drawing.Point(651, 68);
+            this.btnDump.Location = new System.Drawing.Point(10, 318);
             this.btnDump.Name = "btnDump";
             this.btnDump.Size = new System.Drawing.Size(68, 24);
             this.btnDump.TabIndex = 12;
@@ -170,7 +172,7 @@
             // 
             // txtStatus
             // 
-            this.txtStatus.Location = new System.Drawing.Point(8, 341);
+            this.txtStatus.Location = new System.Drawing.Point(11, 379);
             this.txtStatus.Multiline = true;
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -299,7 +301,7 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(12, 318);
+            this.lblStatus.Location = new System.Drawing.Point(12, 352);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(0, 13);
             this.lblStatus.TabIndex = 26;
@@ -307,7 +309,7 @@
             // chkTest
             // 
             this.chkTest.AutoSize = true;
-            this.chkTest.Location = new System.Drawing.Point(743, 72);
+            this.chkTest.Location = new System.Drawing.Point(95, 323);
             this.chkTest.Name = "chkTest";
             this.chkTest.Size = new System.Drawing.Size(47, 17);
             this.chkTest.TabIndex = 13;
@@ -341,7 +343,7 @@
             // 
             // txtLog
             // 
-            this.txtLog.Location = new System.Drawing.Point(426, 8);
+            this.txtLog.Location = new System.Drawing.Point(452, 8);
             this.txtLog.Name = "txtLog";
             this.txtLog.Size = new System.Drawing.Size(293, 20);
             this.txtLog.TabIndex = 5;
@@ -357,7 +359,7 @@
             // 
             // txtReport
             // 
-            this.txtReport.Location = new System.Drawing.Point(426, 36);
+            this.txtReport.Location = new System.Drawing.Point(452, 36);
             this.txtReport.Name = "txtReport";
             this.txtReport.Size = new System.Drawing.Size(293, 20);
             this.txtReport.TabIndex = 31;
@@ -374,18 +376,36 @@
             // chkAutoProject
             // 
             this.chkAutoProject.AutoSize = true;
-            this.chkAutoProject.Location = new System.Drawing.Point(655, 103);
+            this.chkAutoProject.Location = new System.Drawing.Point(165, 323);
             this.chkAutoProject.Name = "chkAutoProject";
             this.chkAutoProject.Size = new System.Drawing.Size(187, 17);
             this.chkAutoProject.TabIndex = 33;
             this.chkAutoProject.Text = "Auto Project/Repository Creation?";
             this.chkAutoProject.UseVisualStyleBackColor = true;
             // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(367, 68);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(75, 13);
+            this.label19.TabIndex = 34;
+            this.label19.Text = "Command Log";
+            // 
+            // txtCmdLog
+            // 
+            this.txtCmdLog.Location = new System.Drawing.Point(452, 65);
+            this.txtCmdLog.Name = "txtCmdLog";
+            this.txtCmdLog.Size = new System.Drawing.Size(293, 20);
+            this.txtCmdLog.TabIndex = 35;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(873, 545);
+            this.ClientSize = new System.Drawing.Size(873, 571);
+            this.Controls.Add(this.txtCmdLog);
+            this.Controls.Add(this.label19);
             this.Controls.Add(this.chkAutoProject);
             this.Controls.Add(this.label18);
             this.Controls.Add(this.txtReport);
@@ -470,6 +490,8 @@
         private System.Windows.Forms.TextBox txtReport;
         private System.Windows.Forms.Label label18;
         private System.Windows.Forms.CheckBox chkAutoProject;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox txtCmdLog;
     }
 }
 

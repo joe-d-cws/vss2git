@@ -20,6 +20,7 @@ namespace VSS2Git
         private string lastCheckPath = "";
         private string extractPath;
         private string logFile;
+        private string cmdLogFile;
         private string createCommand;
         private string openCommand;
         private string addCommand;
@@ -48,38 +49,34 @@ namespace VSS2Git
 
             try
             {
-                configFileName = Path.Combine(Path.GetDirectoryName(Application.ExecutablePath), "VSS2Git.cfg");
-
-                if (LoadConfig(configFileName))
-                {
-                    return;
-                }
+                configFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "VSS2Git.cfg");
 
                 // set default extract path
                 txtExtractPath.Text = Environment.ExpandEnvironmentVariables(txtExtractPath.Text);
                 txtLog.Text = Path.Combine(txtExtractPath.Text, "VSS2Git.log");
                 txtReport.Text = Path.Combine(txtExtractPath.Text, "VSS2Git.html");
+                txtCmdLog.Text = Path.Combine(txtExtractPath.Text, "VSS2Git-commands.txt");
 
                 // Set default database and user names
 
                 // database is in HKEY_CURRENT_USER\Software\Microsoft\Sourcesafe\Current Database
 
                 software = Registry.CurrentUser.OpenSubKey("Software\\Microsoft\\Sourcesafe");
-                if (software == null)
+                if (software != null)
                 {
-                    return;
+                    string vssname = (string)software.GetValue("Current Database");
+
+                    if (!String.IsNullOrEmpty(vssname))
+                    {
+                        txtVss.Text = Path.Combine(vssname, "srcsafe.ini");
+                    }
                 }
-
-                string vssname = (string)software.GetValue("Current Database");
-
-                if (String.IsNullOrEmpty(vssname))
-                {
-                    return;
-                }
-
-                txtVss.Text = Path.Combine(vssname, "srcsafe.ini");
 
                 txtSSUser.Text = Environment.UserName;
+
+                // default values set, now override them from config
+
+                LoadConfig(configFileName);
             }
             finally
             {
@@ -105,10 +102,11 @@ namespace VSS2Git
                                            "SCMClose={10}\r\n" +
                                            "LogFile={11}\r\n" +
                                            "ReportFile={12}\r\n" +
-                                           "TestMode={13}\r\n",
+                                           "CommandLog={13}\r\n" +
+                                           "TestMode={14}\r\n",
                                            txtVss.Text, txtSSUser.Text, txtSSPassword.Text, txtSSRoot.Text,
                                            txtExtractPath.Text, txtCreate.Text, txtOpen.Text, txtAdd.Text, txtUpdate.Text, txtCommit.Text, txtClose.Text,
-                                           txtLog.Text, txtReport.Text, chkTest.Checked.ToString());
+                                           txtLog.Text, txtReport.Text, txtCmdLog.Text, chkTest.Checked.ToString());
 
             try
             {
@@ -199,6 +197,10 @@ namespace VSS2Git
                     {
                         txtReport.Text = settingValue;
                     }
+                    else if (line.StartsWith("CommandLog=", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        txtCmdLog.Text = settingValue;
+                    }
                     else if (line.StartsWith("TestMode=", StringComparison.CurrentCultureIgnoreCase))
                     {
                         chkTest.Checked = (settingValue.ToLower() == "true");
@@ -233,6 +235,10 @@ namespace VSS2Git
             if (String.IsNullOrEmpty(commandLine))
             {
                 return;
+            }
+            if (!String.IsNullOrEmpty(cmdLogFile))
+            {
+                File.AppendAllText(cmdLogFile, commandLine + "\r\n");
             }
             if (testMode)
             {
@@ -614,6 +620,7 @@ namespace VSS2Git
                 // get various settings from the UI
                 extractPath = txtExtractPath.Text.Trim();
                 logFile = txtLog.Text.Trim();
+                cmdLogFile = txtCmdLog.Text.Trim();
                 createCommand = txtCreate.Text.Trim();
                 openCommand = txtOpen.Text.Trim();
                 addCommand = txtAdd.Text.Trim();
