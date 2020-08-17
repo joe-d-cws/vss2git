@@ -51,23 +51,6 @@
             this.label19 = new System.Windows.Forms.Label();
             this.txtCmdLog = new System.Windows.Forms.TextBox();
             this.statLabel = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.txtCommit = new System.Windows.Forms.TextBox();
-            this.label7 = new System.Windows.Forms.Label();
-            this.txtAdd = new System.Windows.Forms.TextBox();
-            this.label8 = new System.Windows.Forms.Label();
-            this.txtUpdate = new System.Windows.Forms.TextBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.txtOpen = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
-            this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.label13 = new System.Windows.Forms.Label();
-            this.txtClose = new System.Windows.Forms.TextBox();
-            this.label14 = new System.Windows.Forms.Label();
-            this.label15 = new System.Windows.Forms.Label();
-            this.txtCreate = new System.Windows.Forms.TextBox();
-            this.label18 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnDump
@@ -255,150 +238,6 @@
             this.statLabel.Size = new System.Drawing.Size(0, 13);
             this.statLabel.TabIndex = 3;
             // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(8, 262);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(100, 13);
-            this.label6.TabIndex = 13;
-            this.label6.Text = "Commit All Changes";
-            // 
-            // txtCommit
-            // 
-            this.txtCommit.Location = new System.Drawing.Point(120, 258);
-            this.txtCommit.Name = "txtCommit";
-            this.txtCommit.Size = new System.Drawing.Size(500, 20);
-            this.txtCommit.TabIndex = 10;
-            this.txtCommit.Text = "git commit -a -m \"{1}\"";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(8, 206);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(70, 13);
-            this.label7.TabIndex = 15;
-            this.label7.Text = "Add New File";
-            // 
-            // txtAdd
-            // 
-            this.txtAdd.Location = new System.Drawing.Point(120, 202);
-            this.txtAdd.Name = "txtAdd";
-            this.txtAdd.Size = new System.Drawing.Size(500, 20);
-            this.txtAdd.TabIndex = 8;
-            this.txtAdd.Text = "git add \"{0}\"";
-            // 
-            // label8
-            // 
-            this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(8, 234);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(100, 13);
-            this.label8.TabIndex = 17;
-            this.label8.Text = "Update Existing File";
-            // 
-            // txtUpdate
-            // 
-            this.txtUpdate.Location = new System.Drawing.Point(120, 230);
-            this.txtUpdate.Name = "txtUpdate";
-            this.txtUpdate.Size = new System.Drawing.Size(500, 20);
-            this.txtUpdate.TabIndex = 9;
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(8, 178);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(59, 13);
-            this.label9.TabIndex = 18;
-            this.label9.Text = "SCM Open";
-            // 
-            // txtOpen
-            // 
-            this.txtOpen.Location = new System.Drawing.Point(120, 174);
-            this.txtOpen.Name = "txtOpen";
-            this.txtOpen.Size = new System.Drawing.Size(500, 20);
-            this.txtOpen.TabIndex = 7;
-            this.txtOpen.Text = "git init";
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(632, 178);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(87, 13);
-            this.label10.TabIndex = 20;
-            this.label10.Text = "{0} - Extract path";
-            // 
-            // label11
-            // 
-            this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(632, 206);
-            this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(144, 13);
-            this.label11.TabIndex = 21;
-            this.label11.Text = "{0} - File name {1} - comment";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(632, 234);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(144, 13);
-            this.label12.TabIndex = 22;
-            this.label12.Text = "{0} - File name {1} - comment";
-            // 
-            // label13
-            // 
-            this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(8, 290);
-            this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(59, 13);
-            this.label13.TabIndex = 23;
-            this.label13.Text = "SCM Close";
-            // 
-            // txtClose
-            // 
-            this.txtClose.Location = new System.Drawing.Point(120, 286);
-            this.txtClose.Name = "txtClose";
-            this.txtClose.Size = new System.Drawing.Size(500, 20);
-            this.txtClose.TabIndex = 11;
-            // 
-            // label14
-            // 
-            this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(632, 262);
-            this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(150, 13);
-            this.label14.TabIndex = 25;
-            this.label14.Text = "{0} - Timestamp {1} - comment";
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(8, 149);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(64, 13);
-            this.label15.TabIndex = 28;
-            this.label15.Text = "SCM Create";
-            // 
-            // txtCreate
-            // 
-            this.txtCreate.Location = new System.Drawing.Point(120, 146);
-            this.txtCreate.Name = "txtCreate";
-            this.txtCreate.Size = new System.Drawing.Size(500, 20);
-            this.txtCreate.TabIndex = 6;
-            // 
-            // label18
-            // 
-            this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(632, 149);
-            this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(165, 13);
-            this.label18.TabIndex = 32;
-            this.label18.Text = "{0} - Extract Path {1} - Timestamp";
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -407,29 +246,12 @@
             this.Controls.Add(this.txtCmdLog);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.chkAutoProject);
-            this.Controls.Add(this.label18);
             this.Controls.Add(this.txtReport);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.txtLog);
             this.Controls.Add(this.label16);
-            this.Controls.Add(this.txtCreate);
-            this.Controls.Add(this.label15);
             this.Controls.Add(this.chkTest);
             this.Controls.Add(this.lblStatus);
-            this.Controls.Add(this.label14);
-            this.Controls.Add(this.txtClose);
-            this.Controls.Add(this.label13);
-            this.Controls.Add(this.label12);
-            this.Controls.Add(this.label11);
-            this.Controls.Add(this.label10);
-            this.Controls.Add(this.txtOpen);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.txtUpdate);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.txtAdd);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.txtCommit);
-            this.Controls.Add(this.label6);
             this.Controls.Add(this.txtStatus);
             this.Controls.Add(this.txtSSRoot);
             this.Controls.Add(this.label5);
@@ -475,23 +297,6 @@
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.TextBox txtCmdLog;
         private System.Windows.Forms.Label statLabel;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox txtCommit;
-        private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox txtAdd;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox txtUpdate;
-        private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox txtOpen;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Label label13;
-        private System.Windows.Forms.TextBox txtClose;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.TextBox txtCreate;
-        private System.Windows.Forms.Label label18;
     }
 }
 
