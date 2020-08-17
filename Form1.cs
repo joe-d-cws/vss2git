@@ -95,11 +95,12 @@ namespace VSS2Git
                                            "ReportFile={6}\r\n" +
                                            "RemoteRepoUrl={7}\r\n" +
                                            "RemoteRepoPath={8}\r\n" +
-                                           "TestMode={9}\r\n",
+                                           "TestMode={9}\r\n" +
+                                           "AutoPushToRemote={10}\r\n",
                                            txtVss.Text, txtSSUser.Text, txtSSPassword.Text, txtSSRoot.Text,
                                            txtExtractPath.Text,
                                            txtLog.Text, txtReport.Text, txtRemoteUrl.Text, txtRemotePath.Text,
-                                           chkTest.Checked.ToString());
+                                           chkTest.Checked.ToString(), chkAutoPush.Checked.ToString());
 
             try
             {
@@ -179,6 +180,11 @@ namespace VSS2Git
                     {
                         chkTest.Checked = (settingValue.ToLower() == "true");
                     }
+                    else if (line.StartsWith("AutoPushToRemote=", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        chkAutoPush.Checked = (settingValue.ToLower() == "true");
+                    }
+
                 }
             }
             return true;
@@ -201,7 +207,19 @@ namespace VSS2Git
                 return;
             }
             lblStatus.Text = message;
+            lblProgress.Text = "";
             lblStatus.Refresh();
+            lblProgress.Refresh();
+        }
+
+        private void SetProgressLabel(string message)
+        {
+            if (lblProgress.Text == message)
+            {
+                return;
+            }
+            lblProgress.Text = message;
+            lblProgress.Refresh();
         }
 
         private void RunCommand(string commandLine)
@@ -245,7 +263,7 @@ namespace VSS2Git
 
                 // Display the project name 
                 StatusMessage("{0}\r\n", vssItem.Spec);
-                SetStatusLabel(vssItem.Spec);
+                SetProgressLabel(vssItem.Spec);
 
                 ItemInfo project = new ItemInfo(vssItem, vssItem.VSSVersion);
 
@@ -461,6 +479,8 @@ namespace VSS2Git
             StringBuilder createRemoteRepo = new StringBuilder();
             StringBuilder pushRemoteRepo = new StringBuilder();
 
+            SetStatusLabel("Extracting and committing");
+
             // Make sure the base path exists,
             // then make it the current directory
             CheckPath(extractPath);
@@ -518,7 +538,7 @@ namespace VSS2Git
                             // there are items to commit
                             commitDate = lastCommit.ToString(DateFormat);
                             // checkin time gap found, commit
-                            SetStatusLabel(commitDate);
+                            SetProgressLabel(commitDate);
                             int checkinGap = Convert.ToInt32((itemList[i].VersionDate - lastCommit).TotalSeconds) + gapInterval;
                             StatusMessage("Commit {0} items ({1})\r\n", commitCount, commitDate);
 
@@ -722,9 +742,18 @@ namespace VSS2Git
 
             cleanup.Sort(new ProjectInfoComparer());
 
+            if (chkAutoPush.Checked && !String.IsNullOrEmpty(txtRemoteUrl.Text))
+            {
+                SetStatusLabel("Cleanup and push to remote");
+            }
+            else
+            {
+                SetStatusLabel("Cleanup");
+            }
+
             foreach (ProjectInfo pi in cleanup)
             {
-                SetStatusLabel(pi.Path);
+                SetProgressLabel(pi.Path);
 
                 ChangeDirectory(pi.Path);
 
@@ -737,9 +766,19 @@ namespace VSS2Git
 
                 if (!String.IsNullOrEmpty(pi.RemoteRepoUrl))
                 {
-                    pushRemoteRepo.AppendFormat("cd \"{0}\"\r\n", pi.Path);
-                    pushRemoteRepo.AppendFormat("git remote add origin \"{0}\"\r\n", pi.RemoteRepoUrl);
-                    pushRemoteRepo.Append("git push -u origin master\r\n");
+                    string gitRemoteAddOrigin = String.Format("git remote add origin \"{0}\"", pi.RemoteRepoUrl);
+                    string gitPush = "git push -u origin master";
+                    if (chkAutoPush.Checked)
+                    {
+                        RunCommand(gitRemoteAddOrigin);
+                        RunCommand(gitPush);
+                    }
+                    else 
+                    {
+                        pushRemoteRepo.AppendFormat("cd \"{0}\"\r\n", pi.Path);
+                        pushRemoteRepo.AppendFormat("{0}\r\n", gitRemoteAddOrigin);
+                        pushRemoteRepo.AppendFormat("{0}\r\n", gitPush);
+                    }
                 }
                 RunCommand("git status");
 
@@ -807,6 +846,7 @@ namespace VSS2Git
 
                 sbStatus = new StringBuilder();
                 lblStatus.Text = "";
+                lblProgress.Text = "";
                 this.Cursor = Cursors.WaitCursor;
 
                 // get various settings from the UI
@@ -863,6 +903,8 @@ namespace VSS2Git
 
                 // Get the root item
                 IVSSItem vssRoot = vssDatabase.get_VSSItem(rootPath, false);
+
+                SetStatusLabel("Scanning VSS database");
 
                 // Process the root item.  This will also recurse through everything else.
                 DumpSubitems(vssRoot, null);

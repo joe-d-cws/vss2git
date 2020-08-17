@@ -52,6 +52,8 @@
             this.txtRemoteUrl = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
             this.txtRemotePath = new System.Windows.Forms.TextBox();
+            this.chkAutoPush = new System.Windows.Forms.CheckBox();
+            this.lblProgress = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnDump
@@ -247,11 +249,31 @@
             this.txtRemotePath.Size = new System.Drawing.Size(232, 20);
             this.txtRemotePath.TabIndex = 35;
             // 
+            // chkAutoPush
+            // 
+            this.chkAutoPush.AutoSize = true;
+            this.chkAutoPush.Location = new System.Drawing.Point(370, 66);
+            this.chkAutoPush.Name = "chkAutoPush";
+            this.chkAutoPush.Size = new System.Drawing.Size(202, 17);
+            this.chkAutoPush.TabIndex = 36;
+            this.chkAutoPush.Text = "Push to remote repo when complete?";
+            this.chkAutoPush.UseVisualStyleBackColor = true;
+            // 
+            // lblProgress
+            // 
+            this.lblProgress.AutoSize = true;
+            this.lblProgress.Location = new System.Drawing.Point(335, 220);
+            this.lblProgress.Name = "lblProgress";
+            this.lblProgress.Size = new System.Drawing.Size(0, 13);
+            this.lblProgress.TabIndex = 37;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(751, 503);
+            this.Controls.Add(this.lblProgress);
+            this.Controls.Add(this.chkAutoPush);
             this.Controls.Add(this.txtRemotePath);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.txtRemoteUrl);
@@ -309,6 +331,8 @@
         private System.Windows.Forms.TextBox txtRemoteUrl;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.TextBox txtRemotePath;
+        private System.Windows.Forms.CheckBox chkAutoPush;
+        private System.Windows.Forms.Label lblProgress;
     }
 }
 
