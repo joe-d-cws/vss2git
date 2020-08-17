@@ -742,7 +742,7 @@ namespace VSS2Git
                 if (!String.IsNullOrEmpty(pi.RemoteRepoUrl))
                 {
                     pushRemoteRepo.AppendFormat("cd {0}\r\n", pi.Path);
-                    pushRemoteRepo.AppendFormat("git remote add origin \"{0}\"", pi.RemoteRepoUrl);
+                    pushRemoteRepo.AppendFormat("git remote add origin \"{0}\"\r\n", pi.RemoteRepoUrl);
                     pushRemoteRepo.Append("git push origin master\r\n");
 
 
