@@ -195,21 +195,20 @@ namespace VSS2Git
             {
                 return;
             }
-            if (testMode)
+
+            StatusMessage("{0}\r\n", commandLine);
+
+            if (!testMode)
             {
-                StatusMessage("{0}\r\n\r\n", commandLine);
-                return;
-            }
-            using (ProcessHandler ph = new ProcessHandler())
-            {
-                ph.CommandLine = commandLine;
-                ph.WaitForExit = true;
+                using (ProcessHandler ph = new ProcessHandler())
+                {
+                    ph.CommandLine = commandLine;
+                    ph.WaitForExit = true;
 
-                StatusMessage("{0}\r\n{1}\r\n", DateTime.Now.ToString(DateFormat), commandLine);
+                    ph.Run();
 
-                ph.Run();
-
-                StatusMessage("{0}\r\n{1}\r\n", DateTime.Now.ToString(DateFormat), ph.ProgramOutput);
+                    StatusMessage("{0}\r\n", ph.ProgramOutput);
+                }
             }
         }
 
