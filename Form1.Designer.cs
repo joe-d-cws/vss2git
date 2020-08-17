@@ -49,15 +49,16 @@
             this.txtReport = new System.Windows.Forms.TextBox();
             this.statLabel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
-            this.txtRemote = new System.Windows.Forms.TextBox();
+            this.txtRemoteUrl = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
+            this.txtRemotePath = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnDump
             // 
-            this.btnDump.Location = new System.Drawing.Point(27, 422);
-            this.btnDump.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.btnDump.Location = new System.Drawing.Point(11, 214);
             this.btnDump.Name = "btnDump";
-            this.btnDump.Size = new System.Drawing.Size(181, 57);
+            this.btnDump.Size = new System.Drawing.Size(68, 24);
             this.btnDump.TabIndex = 12;
             this.btnDump.Text = "Dump";
             this.btnDump.UseVisualStyleBackColor = true;
@@ -66,112 +67,100 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(21, 29);
-            this.label1.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label1.Location = new System.Drawing.Point(8, 12);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(182, 32);
+            this.label1.Size = new System.Drawing.Size(70, 13);
             this.label1.TabIndex = 1;
             this.label1.Text = "SS Database";
             // 
             // txtVss
             // 
-            this.txtVss.Location = new System.Drawing.Point(320, 19);
-            this.txtVss.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.txtVss.Location = new System.Drawing.Point(120, 8);
             this.txtVss.Name = "txtVss";
-            this.txtVss.Size = new System.Drawing.Size(612, 38);
+            this.txtVss.Size = new System.Drawing.Size(232, 20);
             this.txtVss.TabIndex = 0;
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 95);
-            this.label2.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label2.Location = new System.Drawing.Point(8, 40);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(119, 32);
+            this.label2.Size = new System.Drawing.Size(46, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "SS User";
             // 
             // txtSSUser
             // 
-            this.txtSSUser.Location = new System.Drawing.Point(320, 86);
-            this.txtSSUser.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.txtSSUser.Location = new System.Drawing.Point(120, 36);
             this.txtSSUser.Name = "txtSSUser";
-            this.txtSSUser.Size = new System.Drawing.Size(612, 38);
+            this.txtSSUser.Size = new System.Drawing.Size(232, 20);
             this.txtSSUser.TabIndex = 1;
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(21, 162);
-            this.label3.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label3.Location = new System.Drawing.Point(8, 68);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(184, 32);
+            this.label3.Size = new System.Drawing.Size(70, 13);
             this.label3.TabIndex = 6;
             this.label3.Text = "SS Password";
             // 
             // txtSSPassword
             // 
-            this.txtSSPassword.Location = new System.Drawing.Point(320, 153);
-            this.txtSSPassword.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.txtSSPassword.Location = new System.Drawing.Point(120, 64);
             this.txtSSPassword.Name = "txtSSPassword";
-            this.txtSSPassword.Size = new System.Drawing.Size(612, 38);
+            this.txtSSPassword.Size = new System.Drawing.Size(232, 20);
             this.txtSSPassword.TabIndex = 2;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(21, 293);
-            this.label4.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label4.Location = new System.Drawing.Point(8, 123);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(169, 32);
+            this.label4.Size = new System.Drawing.Size(65, 13);
             this.label4.TabIndex = 8;
             this.label4.Text = "Extract Path";
             // 
             // txtExtractPath
             // 
-            this.txtExtractPath.Location = new System.Drawing.Point(320, 286);
-            this.txtExtractPath.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.txtExtractPath.Location = new System.Drawing.Point(120, 120);
             this.txtExtractPath.Name = "txtExtractPath";
-            this.txtExtractPath.Size = new System.Drawing.Size(612, 38);
+            this.txtExtractPath.Size = new System.Drawing.Size(232, 20);
             this.txtExtractPath.TabIndex = 4;
             this.txtExtractPath.Text = "%TEMP%\\VSS2Git";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(21, 227);
-            this.label5.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label5.Location = new System.Drawing.Point(8, 95);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(120, 32);
+            this.label5.Size = new System.Drawing.Size(47, 13);
             this.label5.TabIndex = 10;
             this.label5.Text = "SS Root";
             // 
             // txtSSRoot
             // 
-            this.txtSSRoot.Location = new System.Drawing.Point(320, 219);
-            this.txtSSRoot.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.txtSSRoot.Location = new System.Drawing.Point(120, 92);
             this.txtSSRoot.Name = "txtSSRoot";
-            this.txtSSRoot.Size = new System.Drawing.Size(612, 38);
+            this.txtSSRoot.Size = new System.Drawing.Size(232, 20);
             this.txtSSRoot.TabIndex = 3;
             this.txtSSRoot.Text = "$/";
             // 
             // txtStatus
             // 
-            this.txtStatus.Location = new System.Drawing.Point(27, 513);
-            this.txtStatus.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.txtStatus.Location = new System.Drawing.Point(10, 244);
             this.txtStatus.Multiline = true;
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtStatus.Size = new System.Drawing.Size(1956, 669);
+            this.txtStatus.Size = new System.Drawing.Size(736, 254);
             this.txtStatus.TabIndex = 11;
             // 
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(408, 436);
-            this.lblStatus.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.lblStatus.Location = new System.Drawing.Point(154, 220);
             this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(0, 32);
+            this.lblStatus.Size = new System.Drawing.Size(0, 13);
             this.lblStatus.TabIndex = 26;
             // 
             // chkTest
@@ -179,10 +168,9 @@
             this.chkTest.AutoSize = true;
             this.chkTest.Checked = true;
             this.chkTest.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkTest.Location = new System.Drawing.Point(258, 434);
-            this.chkTest.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.chkTest.Location = new System.Drawing.Point(98, 219);
             this.chkTest.Name = "chkTest";
-            this.chkTest.Size = new System.Drawing.Size(108, 36);
+            this.chkTest.Size = new System.Drawing.Size(47, 17);
             this.chkTest.TabIndex = 13;
             this.chkTest.Text = "Test";
             this.chkTest.UseVisualStyleBackColor = true;
@@ -190,72 +178,83 @@
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(979, 26);
-            this.label16.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label16.Location = new System.Drawing.Point(367, 11);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(108, 32);
+            this.label16.Size = new System.Drawing.Size(41, 13);
             this.label16.TabIndex = 29;
             this.label16.Text = "Log file";
             // 
             // txtLog
             // 
-            this.txtLog.Location = new System.Drawing.Point(1205, 19);
-            this.txtLog.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.txtLog.Location = new System.Drawing.Point(452, 8);
             this.txtLog.Name = "txtLog";
-            this.txtLog.Size = new System.Drawing.Size(775, 38);
+            this.txtLog.Size = new System.Drawing.Size(293, 20);
             this.txtLog.TabIndex = 5;
             // 
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(979, 93);
-            this.label17.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label17.Location = new System.Drawing.Point(367, 39);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(145, 32);
+            this.label17.Size = new System.Drawing.Size(55, 13);
             this.label17.TabIndex = 30;
             this.label17.Text = "Report file";
             // 
             // txtReport
             // 
-            this.txtReport.Location = new System.Drawing.Point(1205, 86);
-            this.txtReport.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.txtReport.Location = new System.Drawing.Point(452, 36);
             this.txtReport.Name = "txtReport";
-            this.txtReport.Size = new System.Drawing.Size(775, 38);
+            this.txtReport.Size = new System.Drawing.Size(293, 20);
             this.txtReport.TabIndex = 31;
             // 
             // statLabel
             // 
             this.statLabel.AutoSize = true;
-            this.statLabel.Location = new System.Drawing.Point(13, 851);
-            this.statLabel.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.statLabel.Location = new System.Drawing.Point(5, 357);
             this.statLabel.Name = "statLabel";
-            this.statLabel.Size = new System.Drawing.Size(0, 32);
+            this.statLabel.Size = new System.Drawing.Size(0, 13);
             this.statLabel.TabIndex = 3;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(21, 360);
-            this.label6.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label6.Location = new System.Drawing.Point(7, 151);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(252, 32);
+            this.label6.Size = new System.Drawing.Size(96, 13);
             this.label6.TabIndex = 32;
-            this.label6.Text = "Remote Repo URL";
+            this.label6.Text = "Remote Base URL";
             // 
-            // txtRemote
+            // txtRemoteUrl
             // 
-            this.txtRemote.Location = new System.Drawing.Point(320, 353);
-            this.txtRemote.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.txtRemote.Name = "txtRemote";
-            this.txtRemote.Size = new System.Drawing.Size(612, 38);
-            this.txtRemote.TabIndex = 33;
+            this.txtRemoteUrl.Location = new System.Drawing.Point(120, 148);
+            this.txtRemoteUrl.Name = "txtRemoteUrl";
+            this.txtRemoteUrl.Size = new System.Drawing.Size(232, 20);
+            this.txtRemoteUrl.TabIndex = 33;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Location = new System.Drawing.Point(8, 181);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(96, 13);
+            this.label7.TabIndex = 34;
+            this.label7.Text = "Remote Base Path";
+            // 
+            // txtRemotePath
+            // 
+            this.txtRemotePath.Location = new System.Drawing.Point(120, 178);
+            this.txtRemotePath.Name = "txtRemotePath";
+            this.txtRemotePath.Size = new System.Drawing.Size(232, 20);
+            this.txtRemotePath.TabIndex = 35;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2005, 1207);
-            this.Controls.Add(this.txtRemote);
+            this.ClientSize = new System.Drawing.Size(751, 503);
+            this.Controls.Add(this.txtRemotePath);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.txtRemoteUrl);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.txtReport);
             this.Controls.Add(this.label17);
@@ -277,7 +276,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.btnDump);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.Name = "Form1";
             this.Text = "Dump VSS Database";
             this.Load += new System.EventHandler(this.Form1_Load);
@@ -308,7 +306,9 @@
         private System.Windows.Forms.TextBox txtReport;
         private System.Windows.Forms.Label statLabel;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox txtRemote;
+        private System.Windows.Forms.TextBox txtRemoteUrl;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox txtRemotePath;
     }
 }
 

@@ -22,7 +22,8 @@ namespace VSS2Git
         private string lastChangeDir = "";
         private string extractPath;
         private string logFile;
-        private string remoteRepoBase;
+        private string remoteRepoBasePath;
+        private string remoteRepoBaseUrl;
         private StringBuilder sbStatus;
         private bool testMode;
         private DateTime earliestDate;
@@ -92,11 +93,12 @@ namespace VSS2Git
                                            "ExtractPath={4}\r\n" +
                                            "LogFile={5}\r\n" +
                                            "ReportFile={6}\r\n" +
-                                           "RemoteRepo={7}\r\n" +
-                                           "TestMode={8}\r\n",
+                                           "RemoteRepoUrl={7}\r\n" +
+                                           "RemoteRepoPath={8}\r\n" +
+                                           "TestMode={9}\r\n",
                                            txtVss.Text, txtSSUser.Text, txtSSPassword.Text, txtSSRoot.Text,
                                            txtExtractPath.Text,
-                                           txtLog.Text, txtReport.Text, txtRemote.Text,
+                                           txtLog.Text, txtReport.Text, txtRemoteUrl.Text, txtRemotePath.Text,
                                            chkTest.Checked.ToString());
 
             try
@@ -165,9 +167,13 @@ namespace VSS2Git
                     {
                         txtReport.Text = settingValue;
                     }
-                    else if (line.StartsWith("RemoteRepo=", StringComparison.CurrentCultureIgnoreCase))
+                    else if (line.StartsWith("RemoteRepoUrl=", StringComparison.CurrentCultureIgnoreCase))
                     {
-                        txtRemote.Text = settingValue;
+                        txtRemoteUrl.Text = settingValue;
+                    }
+                    else if (line.StartsWith("RemoteRepoPath=", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        txtRemotePath.Text = settingValue;
                     }
                     else if (line.StartsWith("TestMode=", StringComparison.CurrentCultureIgnoreCase))
                     {
@@ -377,7 +383,7 @@ namespace VSS2Git
             lastChangeDir = newdir;
         }
 
-        private void GitInit(string projectPath, string remoteRepo)
+        private void GitInit(string projectPath)
         {
             ChangeDirectory(projectPath);
 
@@ -397,7 +403,7 @@ namespace VSS2Git
             RunCommand(String.Format("git add \"{0}\"", fileName));
         }
 
-        private void GitCommit(string projectPath, string remoteRepo, string comment, string date)
+        private void GitCommit(string projectPath, string comment, string date)
         {
             string newComment = "";
 
@@ -447,10 +453,13 @@ namespace VSS2Git
             ItemInfo project = null;
             string currentProjectName = "";
             string currentProjectPath = "";
-            string currentRemoteRepo = "";
+            string currentRemoteRepoPath = "";
+            string currentRemoteRepoUrl = "";
             bool extracted;
             List<ProjectInfo> cleanup = new List<ProjectInfo>();
             List<String> gitProjectList = new List<String>();
+            StringBuilder createRemoteRepo = new StringBuilder();
+            StringBuilder pushRemoteRepo = new StringBuilder();
 
             // Make sure the base path exists,
             // then make it the current directory
@@ -532,7 +541,7 @@ namespace VSS2Git
                             commitCount = 0;
                             checkinCount += 1;
 
-                            GitCommit(currentProjectPath, currentRemoteRepo, commitComment, commitDate);
+                            GitCommit(currentProjectPath, commitComment, commitDate);
 
                             commits.Clear();
                             commitComment = "";
@@ -567,14 +576,23 @@ namespace VSS2Git
                                 string gitRepoName = currentProjectPath.Replace(' ', '-').ToLower() + ".git";
                                 gitProjectList.Add(gitRepoName);
                                 /// *******
-                                if (!String.IsNullOrEmpty(remoteRepoBase))
+                                if (!String.IsNullOrEmpty(remoteRepoBasePath))
                                 {
-                                    currentRemoteRepo = remoteRepoBase + gitRepoName;
-                                    StatusMessage("New remote repo: {0}\r\n", currentRemoteRepo);
+                                    currentRemoteRepoPath = remoteRepoBasePath + gitRepoName;
+                                    StatusMessage("New remote repo path: {0}\r\n", currentRemoteRepoPath);
                                 }
                                 else
                                 {
-                                    currentRemoteRepo = gitRepoName;
+                                    currentRemoteRepoPath = gitRepoName;
+                                }
+                                if (!String.IsNullOrEmpty(remoteRepoBaseUrl))
+                                {
+                                    currentRemoteRepoUrl = remoteRepoBaseUrl + gitRepoName;
+                                    StatusMessage("New remote repo url: {0}\r\n", currentRemoteRepoUrl);
+                                }
+                                else
+                                {
+                                    currentRemoteRepoUrl = gitRepoName;
                                 }
 
                                 // strip the $/ from the start of the item spec, and replace / with \
@@ -583,9 +601,9 @@ namespace VSS2Git
                                 CheckPath(currentProjectPath);
 
                                 // run git init 
-                                GitInit(currentProjectPath, currentRemoteRepo);
+                                GitInit(currentProjectPath);
 
-                                cleanup.Add(new ProjectInfo(currentProjectPath, gitRepoName, currentRemoteRepo)); 
+                                cleanup.Add(new ProjectInfo(currentProjectPath, gitRepoName, currentRemoteRepoUrl, currentRemoteRepoPath)); 
 
                                 project.ProjectPath = currentProjectPath;
 
@@ -711,12 +729,21 @@ namespace VSS2Git
 
                 RunCommand("git gc");
 
-                if (!String.IsNullOrEmpty(pi.RemoteRepo))
+                if (!String.IsNullOrEmpty(pi.RemoteRepoPath))
                 {
                     //git remote rename origin old - origin
                     //git remote add origin https://whatever.git
                     //git push -u origin --all
                     //git push -u origin --tags
+
+                    createRemoteRepo.AppendFormat("git init --bare \"{0}\"\r\n", pi.RemoteRepoPath);
+                }
+
+                if (!String.IsNullOrEmpty(pi.RemoteRepoUrl))
+                {
+                    pushRemoteRepo.AppendFormat("cd {0}\r\n", pi.Path);
+                    pushRemoteRepo.AppendFormat("git remote add origin \"{0}\"", pi.RemoteRepoUrl);
+                    pushRemoteRepo.Append("git push origin master\r\n");
 
 
                     //string cmdLine;
@@ -727,8 +754,8 @@ namespace VSS2Git
                     //RunCommand(cmdLine);
                     //RunCommand("git push -u origin --all");
                     //RunCommand("git push -u origin --tags");
-                    RunCommand("git status");
                 }
+                RunCommand("git status");
 
             }
 
@@ -739,8 +766,12 @@ namespace VSS2Git
 
             gitProjectList.Sort();
 
-            TextForm f = new TextForm(gitProjectList, "Suggest list of remote project names");
-            f.Show();
+            TextForm gpl = new TextForm(gitProjectList, "Suggest list of remote project names");
+            gpl.Show();
+            TextForm cr = new TextForm(createRemoteRepo.ToString(), "Commands to create remote repo(s)");
+            cr.Show();
+            TextForm pr = new TextForm(pushRemoteRepo.ToString(), "Commands to push to remote repos");
+            pr.Show();
 
             StatusMessage("Total checkins: {0}\r\n", checkinCount);
             SetStatusLabel("Done.");
@@ -783,17 +814,29 @@ namespace VSS2Git
 
                 // get various settings from the UI
                 extractPath = txtExtractPath.Text.Trim();
-                if (!String.IsNullOrEmpty(txtRemote.Text.Trim()))
+                if (!String.IsNullOrEmpty(txtRemoteUrl.Text.Trim()))
                 {
-                    remoteRepoBase = txtRemote.Text.Trim();
-                    if (!remoteRepoBase.EndsWith("/"))
+                    remoteRepoBaseUrl = txtRemoteUrl.Text.Trim();
+                    if (!remoteRepoBaseUrl.EndsWith("/"))
                     {
-                        remoteRepoBase += "/";
+                        remoteRepoBaseUrl += "/";
                     }
                 }
                 else
                 {
-                    remoteRepoBase = "";
+                    remoteRepoBaseUrl = "";
+                }
+                if (!String.IsNullOrEmpty(txtRemotePath.Text.Trim()))
+                {
+                    remoteRepoBasePath = txtRemotePath.Text.Trim();
+                    if (!remoteRepoBasePath.EndsWith("/"))
+                    {
+                        remoteRepoBasePath += "/";
+                    }
+                }
+                else
+                {
+                    remoteRepoBasePath = "";
                 }
                 logFile = txtLog.Text.Trim();
                 testMode = chkTest.Checked;
