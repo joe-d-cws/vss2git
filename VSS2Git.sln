@@ -24,8 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SourceCodeControl) = preSolution
 		SccNumberOfProjects = 2
+		SccProjectUniqueName0 = VSS2Git.csproj
 		SccLocalPath0 = .
-		SccProjectUniqueName1 = VSS2Git.csproj
 		SccLocalPath1 = .
 	EndGlobalSection
 EndGlobal
