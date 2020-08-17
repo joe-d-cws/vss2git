@@ -604,7 +604,7 @@ namespace VSS2Git
                                 // run git init 
                                 GitInit(currentProjectPath);
 
-                                cleanup.Add(new ProjectInfo(currentProjectPath, gitRepoName, currentRemoteRepoUrl, currentRemoteRepoPath)); 
+                                cleanup.Add(new ProjectInfo(currentProjectPath, gitRepoName, currentRemoteRepoUrl, currentRemoteRepoPath));
 
                                 project.ProjectPath = currentProjectPath;
 
@@ -744,7 +744,7 @@ namespace VSS2Git
                 {
                     pushRemoteRepo.AppendFormat("cd \"{0}\"\r\n", pi.Path);
                     pushRemoteRepo.AppendFormat("git remote add origin \"{0}\"\r\n", pi.RemoteRepoUrl);
-                    pushRemoteRepo.Append("git push origin master\r\n");
+                    pushRemoteRepo.Append("git push -u origin master\r\n");
 
 
                     //string cmdLine;
@@ -910,7 +910,7 @@ namespace VSS2Git
         {
             try
             {
-            DumpVssDatabase();
+                DumpVssDatabase();
             }
             catch (Exception ex)
             {

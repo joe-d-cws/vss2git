@@ -1,22 +1,23 @@
 ﻿
 HOW TO USE:
 
-Check everything in to VSS.
+1. Check everything in to VSS.
 
-Run Analyze on the VSS repository.
+2. Run Analyze on the VSS repository.
 
-Clean up the VSS repository.  The program defines projects as the first
-directories in the tree structure that have files in them.  So if there's
-a file in the root folder of the VSS repository, everything will be put in
-one giant project.
+3. Clean up the VSS repository.  
 
-Install GIT from https://www.git-scm.com.
+The program defines projects as the first directories in the tree structure
+that have files in them.  So if there's a file in the root folder of the 
+VSS repository, everything will be put in one giant project.
+
+4. Install GIT from https://www.git-scm.com.
 
 Run
   git config --global user.email "you@example.com"
   git config --global user.name "Your Name"
 
-Run the program.
+5. Run this program.
 
 Fill in the fields:
 
@@ -50,6 +51,17 @@ Wait.  It may take awhile.
 
 The program makes NO CHANGES to the VSS repository.  If the results are not
 to your liking, fix whatever the problem was and try it again.
+
+6. Set up public keys for access to remote repo
+
+It took me awhile to get this working.
+
+You will need to use ssh-keygen to create a public key on your LOCAL system.
+
+Add the public key to the ~/.ssh/authorized_keys file on the REMOTE system.
+
+
+------------------------------------------------------------------------------
 
 WHAT IT DOES:
 
