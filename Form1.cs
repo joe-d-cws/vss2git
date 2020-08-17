@@ -514,7 +514,7 @@ namespace VSS2Git
             List<String> gitProjectList = new List<String>();
             StringBuilder createRemoteRepo = new StringBuilder();
             StringBuilder pushRemoteRepo = new StringBuilder();
-            StringBuilder projectXref = new StringBuilder();
+            List<string> projectXref = new List<String>();
 
             SetStatusLabel("Extracting and committing");
 
@@ -653,7 +653,7 @@ namespace VSS2Git
                                     currentRemoteRepoUrl = gitRepoName;
                                 }
 
-                                projectXref.AppendFormat("{0} -> {1}\r\n", project.Spec, gitRepoName);
+                                projectXref.Add(String.Format("{0} -> {1}\r\n", project.Spec, gitRepoName));
 
                                 // strip the $/ from the start of the item spec, and replace / with \
                                 currentProjectPath = Path.Combine(extractPath, currentProjectPath.Replace('/', '\\'));
@@ -848,9 +848,11 @@ namespace VSS2Git
                 pr.Show();
             }
 
-            if (projectXref.Length > 0)
+            if (projectXref.Count > 0)
             {
-                TextForm xr = new TextForm(projectXref.ToString(), "VSS project -> Git project");
+                projectXref.Sort();
+
+                TextForm xr = new TextForm(projectXref, "VSS project -> Git project");
                 xr.Show();
             }
 

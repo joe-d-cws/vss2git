@@ -22,10 +22,4 @@ Global
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0917F405-BD24-46AB-939E-A09EB32E30DD}
 	EndGlobalSection
-	GlobalSection(SourceCodeControl) = preSolution
-		SccNumberOfProjects = 2
-		SccProjectUniqueName0 = VSS2Git.csproj
-		SccLocalPath0 = .
-		SccLocalPath1 = .
-	EndGlobalSection
 EndGlobal
