@@ -54,6 +54,18 @@ Report file - Report of all the file versions from VSS. Of dubious utility,
 
 Remote base URL - OPTIONAL - Base url of remote git repo.
 
+Push to remote repo when complete - Automatically push to the
+remote repo when everything's done.  This assumes that the projects already
+exist on the remote, or that they will be automatically created on the
+first push.
+
+Flatten - Flatten VSS project names.  If you have a project in VSS like
+/long/path/to/the/project/projectname, it will truncate the path to
+projectname.git.  If there is already a project by that name, it will append
+a counter to it and increment until it gets to an unused name.  If this is 
+not selected, the project will be the full 
+/long/path/to/the/project/projectname.git. 
+
 For example, if you have all your projects saved to a remote repo
 at https://www.example.com/code/repo/path-to-project, the base url is
 https://www.example.com/code/repo
@@ -78,16 +90,6 @@ Wait.  It may take awhile.
 
 The program makes NO CHANGES to the VSS repository.  If the results are not
 to your liking, fix whatever the problem was and try it again.
-
-6. OPTIONAL - Set up public keys for access to remote repo
-
-The steps for this vary on who does your hosting.
-
-I self-host, so it took me awhile to get this working.
-
-You will need to use ssh-keygen to create a public key on your LOCAL system.
-
-Add the public key to the ~/.ssh/authorized_keys file on the REMOTE system.
 
 
 ------------------------------------------------------------------------------
