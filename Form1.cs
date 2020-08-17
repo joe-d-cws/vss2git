@@ -18,6 +18,7 @@ namespace VSS2Git
         private List<ItemInfo> itemList;
         private List<ItemInfo> projectList;
         private string lastCheckPath = "";
+        private string lastChangeDir = "";
         private string extractPath;
         private string logFile;
         private string cmdLogFile;
@@ -262,7 +263,7 @@ namespace VSS2Git
         /// Process a VSS item, and recurse through the children
         /// </summary>
         /// <param name="vssItem"></param>
-        private void DumpSubitems(IVSSItem vssItem)
+        private void DumpSubitems(IVSSItem vssItem, ItemInfo parentProject)
         {
             if (vssItem.Deleted)
             {
@@ -280,11 +281,15 @@ namespace VSS2Git
 
                 ItemInfo project = new ItemInfo(vssItem, vssItem.VSSVersion);
 
+                project.Project = parentProject;
+
                 // Now process all the children of this project
                 foreach (IVSSItem item in vssItem.get_Items(true))
                 {
-                    DumpSubitems(item);
+                    DumpSubitems(item, project);
                 }
+                StatusMessage("Files: {0}\r\n", project.FileCount);
+                //itemList.Add(project);
             }
             else
             {
@@ -296,6 +301,7 @@ namespace VSS2Git
                 foreach (IVSSVersion vssVersion in vssItem.get_Versions(0))
                 {
                     ItemInfo item = new ItemInfo(vssItem, vssVersion);
+                    item.Project = parentProject;
                     if (item.VersionDate < earliestDate)
                     {
                         earliestDate = item.VersionDate;
@@ -306,6 +312,7 @@ namespace VSS2Git
                     }
                     itemList.Add(item);
                 }
+                parentProject.FileCount++;
             }
         }
 
@@ -335,16 +342,30 @@ namespace VSS2Git
                 return;
             }
             TextWriter tr = new StreamWriter(fileName);
-            tr.WriteLine("<HTML><HEAD></HEAD><BODY><TABLE>");
-            tr.WriteLine("<TR><TD>ITEM_TYPE</TD><TD>PARENT</TD><TD>PHYSICAL</TD><TD>SPEC</TD><TD>VERSION_NUMBER</TD><TD>VERSION_DATE</TD><TD>ACTION</TD><TD>COMMENT</TD><TD>NAME</TD><TD>LOCAL_SPEC</TD><TD>LABEL</TD><TD>LABEL_COMMENT</TD><TD>USER_NAME</TD></TR>");
+            tr.Write("<HTML>\r\n" + 
+                     "<HEAD>\r\n" +
+                     "<STYLE>\r\n" +
+                     "table, th, td {\r\n" +
+                     "  border: 1px solid black;\r\n" +
+                     "  white-space: nowrap;\r\n" +
+                     "}\r\n" +
+                     "</STYLE>\r\n" +
+                     "</HEAD>\r\n" +
+                     "<BODY>\r\n" +
+                     "<TABLE>\r\n" +
+                     "<TR><TD>ITEM_TYPE</TD><TD>PROJECT</TD><TD>PARENT</TD><TD>PHYSICAL</TD><TD>SPEC</TD><TD>VERSION_NUMBER</TD><TD>VERSION_DATE</TD><TD>ACTION</TD><TD>COMMENT</TD><TD>NAME</TD><TD>LOCAL_SPEC</TD><TD>LABEL</TD><TD>LABEL_COMMENT</TD><TD>USER_NAME</TD></TR>\r\n");
             foreach (ItemInfo item in itemList)
             {
-                tr.WriteLine("<TR><TD>{0}</TD><TD>{1}</TD><TD>{2}</TD><TD>{3}</TD><TD>{4}</TD><TD>{5}</TD><TD>{6}</TD><TD>{7}</TD><TD>{8}</TD><TD>{9}</TD><TD>{10}</TD><TD>{11}</TD><TD>{12}</TD></TR>", 
-                                item.ItemType, item.Parent, item.Physical, item.Spec,
+                string projectName = item.FindProjectName();
+
+                tr.Write("<TR><TD>{0}</TD><TD>{1}</TD><TD>{2}</TD><TD>{3}</TD><TD>{4}</TD><TD>{5}</TD><TD>{6}</TD><TD>{7}</TD><TD>{8}</TD><TD>{9}</TD><TD>{10}</TD><TD>{11}</TD><TD>{12}</TD></TR>\r\n",
+                                item.ItemType, projectName, item.Parent, item.Physical, item.Spec,
                                 item.VersionNumber, item.VersionDate, item.Action, item.Comment,
                                 item.Name, item.LocalSpec, item.Label, item.LabelComment, item.UserName);
             }
-            tr.WriteLine("</TABLE></BODY></HTML>");
+            tr.Write("</TABLE>\r\n" +
+                         "</BODY>\r\n" +
+                         "</HTML>");
             tr.Close();
         }
 
@@ -373,6 +394,40 @@ namespace VSS2Git
             return result.Trim();
         }
 
+        private void ChangeDirectory(string newdir)
+        {
+            if (newdir == lastChangeDir)
+            {
+                return;
+            }
+            Directory.SetCurrentDirectory(newdir);
+            StatusMessage("CD {0}\r\n", newdir);
+            lastChangeDir = newdir;
+        }
+
+        private void GitInit(string projectPath)
+        {
+            ChangeDirectory(projectPath);
+
+            RunCommand("git init");
+        }
+
+        private void GitCommit(string projectPath, string comment, string date)
+        {
+            ChangeDirectory(projectPath);
+
+            RunCommand("git add .");
+
+            if (String.IsNullOrEmpty(comment))
+            {
+                RunCommand(String.Format("git commit -a --allow-empty-message"));
+            }
+            else
+            {
+                RunCommand(String.Format("git commit -a -m \"{0}\"", comment));
+            }
+        }
+
         /// <summary>
         /// Extract individual file versions, and commit to the new source control
         /// </summary>
@@ -390,6 +445,9 @@ namespace VSS2Git
             string commitDate = "";
             string itemComment;
             string rootStrip;
+            ItemInfo project = null;
+            string currentProjectName = "";
+            string currentProjectPath = "";
 
             // Make sure the base path exists,
             // then make it the current directory
@@ -420,17 +478,17 @@ namespace VSS2Git
                 earliestDate = DateTime.Now;
             }
 
-            // Run the "create" command
-            if (!String.IsNullOrEmpty(createCommand))
-            {
-                RunCommand(String.Format(createCommand, extractPath, earliestDate.ToString(DateFormat)));
-            }
+            //// Run the "create" command
+            //if (!String.IsNullOrEmpty(createCommand))
+            //{
+            //    RunCommand(String.Format(createCommand, extractPath, earliestDate.ToString(DateFormat)));
+            //}
 
-            // Run the "open" command
-            if (!String.IsNullOrEmpty(openCommand))
-            {
-                RunCommand(String.Format(openCommand, extractPath));
-            }
+            //// Run the "open" command
+            //if (!String.IsNullOrEmpty(openCommand))
+            //{
+            //    RunCommand(String.Format(openCommand, extractPath));
+            //}
 
             lastCheckPath = "";
 
@@ -447,27 +505,28 @@ namespace VSS2Git
                 // (gap interval is in checkinGap)
                 if (itemList[i].ItemType != 0)
                 {
-                    if ((commits.Contains(itemList[i].Spec) || itemList[i].VersionDate > lastCommit) && commitCount != 0)
+                    if ((commits.Contains(itemList[i].Spec)  // if a previous version is already stanged to commit...
+                        || itemList[i].VersionDate > lastCommit)   // or there's a date gap
+                        && commitCount != 0)  // and there are items staged to commit
                     {
                         if (itemList[i].VersionDate <= lastCommit)
                         {
                             StatusMessage("********************\r\n");
                         }
                         commitDate = lastCommit.ToString(DateFormat);
-                        if (String.IsNullOrEmpty(commitComment))
-                        {
-                            commitComment = commitDate;
-                        }
+                        //if (String.IsNullOrEmpty(commitComment))
+                        //{
+                        //    commitComment = commitDate;
+                        //}
                         // checkin time gap found, commit
                         SetStatusLabel(commitDate);
                         string msg = String.Format("Commit {0} items ({1})\r\nCheckin gap: {2:0000000}\r\n", commitCount, commitDate, (itemList[i].VersionDate - lastCommit).TotalSeconds+checkinGap);
                         StatusMessage(msg);
                         commitCount = 0;
                         checkinCount += 1;
-                        if (!String.IsNullOrEmpty(commitCommand))
-                        {
-                            RunCommand(String.Format(commitCommand, commitDate, commitComment));
-                        }
+
+                        GitCommit(currentProjectPath, commitComment, commitDate);
+
                         commits.Clear();
                         commitComment = "";
                         if (itemList[i].VersionDate > latestDate)
@@ -490,9 +549,6 @@ namespace VSS2Git
                         commitComment = itemComment;
                     }
 
-                    StatusMessage("{0} (ver {1} - {2} {3} {4})\r\n", itemList[i].Spec, itemList[i].VersionNumber, itemList[i].VersionDate, itemList[i].Action ?? "", itemComment);
-
-                    
                     // strip root path from spec
                     string itemName = itemList[i].Spec.Substring(2);
                     if (!String.IsNullOrEmpty(rootStrip))
@@ -507,9 +563,63 @@ namespace VSS2Git
                         }
                     }
 
-
                     // strip the $/ from the start of the item spec, and replace / with \
                     itemName = itemName.Replace('/', '\\');
+
+                    project = itemList[i].FindProject();
+                    if (project.Spec != currentProjectName)
+                    {
+                        if (!String.IsNullOrEmpty(currentProjectName))
+                        {
+                            if (commitCount != 0)
+                            {
+                                // current project has changed.
+                                GitCommit(currentProjectPath, commitComment, commitDate);
+                            }
+
+                            commitCount = 0;
+                            commits.Clear();
+                            commitComment = "";
+                        }
+
+                        if (!project.Created)
+                        {
+                            currentProjectPath = project.Spec.Substring(2);
+
+                            if (!String.IsNullOrEmpty(rootStrip))
+                            {
+                                if (currentProjectPath.StartsWith(rootStrip))
+                                {
+                                    currentProjectPath = currentProjectPath.Substring(rootStrip.Length);
+                                }
+                                else
+                                {
+                                    StatusMessage("******************* Unable to strip root path from project path.\r\n");
+                                }
+                            }
+
+                            // strip the $/ from the start of the item spec, and replace / with \
+                            currentProjectPath = Path.Combine(extractPath, currentProjectPath.Replace('/', '\\'));
+
+                            CheckPath(currentProjectPath);
+
+
+                            // run git init 
+
+                            GitInit(currentProjectPath);
+
+                            project.ProjectPath = currentProjectPath;
+
+                            project.Created = true;
+                        }
+                        else
+                        {
+                            currentProjectPath = project.ProjectPath;
+                        }
+                        currentProjectName = project.Spec;
+                    }
+
+                    StatusMessage("{0} (ver {1} - {2} {3} {4})\r\n", itemList[i].Spec, itemList[i].VersionNumber, itemList[i].VersionDate, itemList[i].Action ?? "", itemComment);
 
                     // get the full path name to extract to
                     string fileName = Path.Combine(extractPath, itemName);
@@ -563,37 +673,37 @@ namespace VSS2Git
 
                             commandLine = null;
 
-                            if (newFile)
-                            {
-                                if (!String.IsNullOrEmpty(addCommand))
-                                {
-                                    // new file - use the add command
-                                    commandLine = String.Format(addCommand, fileName, itemList[i].Comment ?? "");
-                                }
-                            }
-                            else
-                            {
-                                if (!String.IsNullOrEmpty(updateCommand))
-                                {
-                                    // new version of existing file - use the update command
-                                    commandLine = String.Format(updateCommand, fileName, itemList[i].Comment ?? "");
-                                }
-                            }
-                            if (!String.IsNullOrEmpty(commandLine))
-                            {
-                                // run the add/update command
-                                RunCommand(commandLine);
-                            }
+                            //if (newFile)
+                            //{
+                            //    if (!String.IsNullOrEmpty(addCommand))
+                            //    {
+                            //        // new file - use the add command
+                            //        commandLine = String.Format(addCommand, fileName, itemList[i].Comment ?? "");
+                            //    }
+                            //}
+                            //else
+                            //{
+                            //    if (!String.IsNullOrEmpty(updateCommand))
+                            //    {
+                            //        // new version of existing file - use the update command
+                            //        commandLine = String.Format(updateCommand, fileName, itemList[i].Comment ?? "");
+                            //    }
+                            //}
+                            //if (!String.IsNullOrEmpty(commandLine))
+                            //{
+                            //    // run the add/update command
+                            //    RunCommand(commandLine);
+                            //}
                         }
                     }
                 }
             }
 
-            // close the SCM
-            if (!String.IsNullOrEmpty(closeCommand))
-            {
-                RunCommand(closeCommand);
-            }
+            //// close the SCM
+            //if (!String.IsNullOrEmpty(closeCommand))
+            //{
+            //    RunCommand(closeCommand);
+            //}
 
             if (curDir != null)
             {
@@ -634,6 +744,7 @@ namespace VSS2Git
                 itemList = new List<ItemInfo>();
                 projectList = new List<ItemInfo>();
                 lastCheckPath = "";
+                lastChangeDir = "";
 
                 // Make sure the base path exists,
                 CheckPath(extractPath);
@@ -648,7 +759,7 @@ namespace VSS2Git
                 IVSSItem vssRoot = vssDatabase.get_VSSItem(rootPath, false);
 
                 // Process the root item.  This will also recurse through everything else.
-                DumpSubitems(vssRoot);
+                DumpSubitems(vssRoot, null);
 
                 // add a dummy record that will sort to the end
                 ItemInfo item = new ItemInfo();

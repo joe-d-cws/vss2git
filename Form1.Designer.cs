@@ -32,7 +32,6 @@
             this.btnDump = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.txtVss = new System.Windows.Forms.TextBox();
-            this.statLabel = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.txtSSUser = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -42,6 +41,16 @@
             this.label5 = new System.Windows.Forms.Label();
             this.txtSSRoot = new System.Windows.Forms.TextBox();
             this.txtStatus = new System.Windows.Forms.TextBox();
+            this.lblStatus = new System.Windows.Forms.Label();
+            this.chkTest = new System.Windows.Forms.CheckBox();
+            this.label16 = new System.Windows.Forms.Label();
+            this.txtLog = new System.Windows.Forms.TextBox();
+            this.label17 = new System.Windows.Forms.Label();
+            this.txtReport = new System.Windows.Forms.TextBox();
+            this.chkAutoProject = new System.Windows.Forms.CheckBox();
+            this.label19 = new System.Windows.Forms.Label();
+            this.txtCmdLog = new System.Windows.Forms.TextBox();
+            this.statLabel = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.txtCommit = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
@@ -56,18 +65,9 @@
             this.label13 = new System.Windows.Forms.Label();
             this.txtClose = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.lblStatus = new System.Windows.Forms.Label();
-            this.chkTest = new System.Windows.Forms.CheckBox();
             this.label15 = new System.Windows.Forms.Label();
             this.txtCreate = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
-            this.txtLog = new System.Windows.Forms.TextBox();
-            this.label17 = new System.Windows.Forms.Label();
-            this.txtReport = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
-            this.chkAutoProject = new System.Windows.Forms.CheckBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.txtCmdLog = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnDump
@@ -95,14 +95,6 @@
             this.txtVss.Name = "txtVss";
             this.txtVss.Size = new System.Drawing.Size(232, 20);
             this.txtVss.TabIndex = 0;
-            // 
-            // statLabel
-            // 
-            this.statLabel.AutoSize = true;
-            this.statLabel.Location = new System.Drawing.Point(8, 294);
-            this.statLabel.Name = "statLabel";
-            this.statLabel.Size = new System.Drawing.Size(0, 13);
-            this.statLabel.TabIndex = 3;
             // 
             // label2
             // 
@@ -178,6 +170,90 @@
             this.txtStatus.ScrollBars = System.Windows.Forms.ScrollBars.Both;
             this.txtStatus.Size = new System.Drawing.Size(796, 180);
             this.txtStatus.TabIndex = 11;
+            // 
+            // lblStatus
+            // 
+            this.lblStatus.AutoSize = true;
+            this.lblStatus.Location = new System.Drawing.Point(12, 352);
+            this.lblStatus.Name = "lblStatus";
+            this.lblStatus.Size = new System.Drawing.Size(0, 13);
+            this.lblStatus.TabIndex = 26;
+            // 
+            // chkTest
+            // 
+            this.chkTest.AutoSize = true;
+            this.chkTest.Location = new System.Drawing.Point(95, 323);
+            this.chkTest.Name = "chkTest";
+            this.chkTest.Size = new System.Drawing.Size(47, 17);
+            this.chkTest.TabIndex = 13;
+            this.chkTest.Text = "Test";
+            this.chkTest.UseVisualStyleBackColor = true;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(367, 11);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(41, 13);
+            this.label16.TabIndex = 29;
+            this.label16.Text = "Log file";
+            // 
+            // txtLog
+            // 
+            this.txtLog.Location = new System.Drawing.Point(452, 8);
+            this.txtLog.Name = "txtLog";
+            this.txtLog.Size = new System.Drawing.Size(293, 20);
+            this.txtLog.TabIndex = 5;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(367, 39);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(55, 13);
+            this.label17.TabIndex = 30;
+            this.label17.Text = "Report file";
+            // 
+            // txtReport
+            // 
+            this.txtReport.Location = new System.Drawing.Point(452, 36);
+            this.txtReport.Name = "txtReport";
+            this.txtReport.Size = new System.Drawing.Size(293, 20);
+            this.txtReport.TabIndex = 31;
+            // 
+            // chkAutoProject
+            // 
+            this.chkAutoProject.AutoSize = true;
+            this.chkAutoProject.Location = new System.Drawing.Point(165, 323);
+            this.chkAutoProject.Name = "chkAutoProject";
+            this.chkAutoProject.Size = new System.Drawing.Size(187, 17);
+            this.chkAutoProject.TabIndex = 33;
+            this.chkAutoProject.Text = "Auto Project/Repository Creation?";
+            this.chkAutoProject.UseVisualStyleBackColor = true;
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(367, 68);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(75, 13);
+            this.label19.TabIndex = 34;
+            this.label19.Text = "Command Log";
+            // 
+            // txtCmdLog
+            // 
+            this.txtCmdLog.Location = new System.Drawing.Point(452, 65);
+            this.txtCmdLog.Name = "txtCmdLog";
+            this.txtCmdLog.Size = new System.Drawing.Size(293, 20);
+            this.txtCmdLog.TabIndex = 35;
+            // 
+            // statLabel
+            // 
+            this.statLabel.AutoSize = true;
+            this.statLabel.Location = new System.Drawing.Point(8, 294);
+            this.statLabel.Name = "statLabel";
+            this.statLabel.Size = new System.Drawing.Size(0, 13);
+            this.statLabel.TabIndex = 3;
             // 
             // label6
             // 
@@ -298,24 +374,6 @@
             this.label14.TabIndex = 25;
             this.label14.Text = "{0} - Timestamp {1} - comment";
             // 
-            // lblStatus
-            // 
-            this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(12, 352);
-            this.lblStatus.Name = "lblStatus";
-            this.lblStatus.Size = new System.Drawing.Size(0, 13);
-            this.lblStatus.TabIndex = 26;
-            // 
-            // chkTest
-            // 
-            this.chkTest.AutoSize = true;
-            this.chkTest.Location = new System.Drawing.Point(95, 323);
-            this.chkTest.Name = "chkTest";
-            this.chkTest.Size = new System.Drawing.Size(47, 17);
-            this.chkTest.TabIndex = 13;
-            this.chkTest.Text = "Test";
-            this.chkTest.UseVisualStyleBackColor = true;
-            // 
             // label15
             // 
             this.label15.AutoSize = true;
@@ -332,38 +390,6 @@
             this.txtCreate.Size = new System.Drawing.Size(500, 20);
             this.txtCreate.TabIndex = 6;
             // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(367, 11);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(41, 13);
-            this.label16.TabIndex = 29;
-            this.label16.Text = "Log file";
-            // 
-            // txtLog
-            // 
-            this.txtLog.Location = new System.Drawing.Point(452, 8);
-            this.txtLog.Name = "txtLog";
-            this.txtLog.Size = new System.Drawing.Size(293, 20);
-            this.txtLog.TabIndex = 5;
-            // 
-            // label17
-            // 
-            this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(367, 39);
-            this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(55, 13);
-            this.label17.TabIndex = 30;
-            this.label17.Text = "Report file";
-            // 
-            // txtReport
-            // 
-            this.txtReport.Location = new System.Drawing.Point(452, 36);
-            this.txtReport.Name = "txtReport";
-            this.txtReport.Size = new System.Drawing.Size(293, 20);
-            this.txtReport.TabIndex = 31;
-            // 
             // label18
             // 
             this.label18.AutoSize = true;
@@ -372,32 +398,6 @@
             this.label18.Size = new System.Drawing.Size(165, 13);
             this.label18.TabIndex = 32;
             this.label18.Text = "{0} - Extract Path {1} - Timestamp";
-            // 
-            // chkAutoProject
-            // 
-            this.chkAutoProject.AutoSize = true;
-            this.chkAutoProject.Location = new System.Drawing.Point(165, 323);
-            this.chkAutoProject.Name = "chkAutoProject";
-            this.chkAutoProject.Size = new System.Drawing.Size(187, 17);
-            this.chkAutoProject.TabIndex = 33;
-            this.chkAutoProject.Text = "Auto Project/Repository Creation?";
-            this.chkAutoProject.UseVisualStyleBackColor = true;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(367, 68);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(75, 13);
-            this.label19.TabIndex = 34;
-            this.label19.Text = "Command Log";
-            // 
-            // txtCmdLog
-            // 
-            this.txtCmdLog.Location = new System.Drawing.Point(452, 65);
-            this.txtCmdLog.Name = "txtCmdLog";
-            this.txtCmdLog.Size = new System.Drawing.Size(293, 20);
-            this.txtCmdLog.TabIndex = 35;
             // 
             // Form1
             // 
@@ -456,7 +456,6 @@
         private System.Windows.Forms.Button btnDump;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtVss;
-        private System.Windows.Forms.Label statLabel;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtSSUser;
         private System.Windows.Forms.Label label3;
@@ -466,6 +465,16 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtSSRoot;
         private System.Windows.Forms.TextBox txtStatus;
+        private System.Windows.Forms.Label lblStatus;
+        private System.Windows.Forms.CheckBox chkTest;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.TextBox txtLog;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.TextBox txtReport;
+        private System.Windows.Forms.CheckBox chkAutoProject;
+        private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox txtCmdLog;
+        private System.Windows.Forms.Label statLabel;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox txtCommit;
         private System.Windows.Forms.Label label7;
@@ -480,18 +489,9 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txtClose;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.Label lblStatus;
-        private System.Windows.Forms.CheckBox chkTest;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.TextBox txtCreate;
-        private System.Windows.Forms.Label label16;
-        private System.Windows.Forms.TextBox txtLog;
-        private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.TextBox txtReport;
         private System.Windows.Forms.Label label18;
-        private System.Windows.Forms.CheckBox chkAutoProject;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.TextBox txtCmdLog;
     }
 }
 

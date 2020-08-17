@@ -30,6 +30,34 @@ namespace VSS2Git
         {
         }
 
+        public ItemInfo FindProject()
+        {
+            ItemInfo cur = this.Project;
+            ItemInfo result = null;
+
+            while (cur != null)
+            {
+                if (cur.FileCount != 0)
+                {
+                    result = cur;
+                }
+
+                cur = cur.Project;
+            }
+
+            return result;
+        }
+
+        public string FindProjectName()
+        {
+            ItemInfo project = this.FindProject();
+            if (project != null)
+            {
+                return project.Spec;
+            }
+            return "";
+        }
+
         public int ItemType { get; set; }
         public string Parent { get; set; }
         public string Physical { get; set; }
@@ -45,12 +73,19 @@ namespace VSS2Git
         public string UserName { get; set; }
         public IVSSItem VSSItem { get; private set; }
 
+        public int FileCount { get; set; }
+
+        public ItemInfo Project { get; set; }
+        public string ProjectPath { get; set; }
+
+        public bool Created { get; set; }
+
         public int ChildCount { get; set; }
     }
 
     public class ItemInfoComparer : IComparer<ItemInfo>
     {
-        // sort order: date, file name, version
+        // sort order: type, date, file name, version
         public int Compare(ItemInfo i1, ItemInfo i2)
         {
             int result;
@@ -66,6 +101,12 @@ namespace VSS2Git
             if (i2 == null)
             {
                 return 1;
+            }
+
+            result = i1.ItemType.CompareTo(i2.ItemType);
+            if (result != 0)
+            {
+                return result;
             }
 
             result = i1.VersionDate.CompareTo(i2.VersionDate);
