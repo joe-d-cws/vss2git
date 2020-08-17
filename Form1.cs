@@ -766,7 +766,7 @@ namespace VSS2Git
 
             gitProjectList.Sort();
 
-            TextForm gpl = new TextForm(gitProjectList, "Suggest list of remote project names");
+            TextForm gpl = new TextForm(gitProjectList, "Suggested list of remote project names");
             gpl.Show();
             TextForm cr = new TextForm(createRemoteRepo.ToString(), "Commands to create remote repo(s)");
             cr.Show();
@@ -907,15 +907,15 @@ namespace VSS2Git
 
         private void btnDump_Click(object sender, EventArgs e)
         {
-            //try
-            //{
+            try
+            {
             DumpVssDatabase();
-            //}
-            //catch (Exception ex)
-            //{
-            //    StatusMessage("{0}\r\n", ExceptionHandler.UnwindExceptions(ex));
-            //    MessageBox.Show(ex.ToString());
-            //}
+            }
+            catch (Exception ex)
+            {
+                StatusMessage("{0}\r\n", ExceptionHandler.UnwindExceptions(ex));
+                MessageBox.Show(ex.ToString());
+            }
         }
 
         private void Form1_Load(object sender, EventArgs e)

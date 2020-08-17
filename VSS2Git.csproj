@@ -114,7 +114,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="vss2git.ico" />
-    <EmbeddedResource Include=".gitignore" />
     <Content Include="readme.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

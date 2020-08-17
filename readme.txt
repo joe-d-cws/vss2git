@@ -10,7 +10,11 @@ directories in the tree structure that have files in them.  So if there's
 a file in the root folder of the VSS repository, everything will be put in
 one giant project.
 
-Create a GIT repository if you don't have one already.
+Install GIT from https://www.git-scm.com.
+
+Run
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
 
 Run the program.
 
@@ -26,8 +30,17 @@ SS Password - VSS Password.
 SS Root - Root VSS path to extract.  Default is $/ for the whole thing,
           but you can do a single project or tree if you want.
           
-Extract path - A temporary directory to extract the files to.  It will be created if
-               necessary.
+Extract path - A temporary directory to extract the files to.  It will be
+               created if necessary.  Default is %TEMP%\VSS2Git
+
+Log file - Saves all output.  Default is ExtractPath\VSS2Git.log
+
+Report file - Report of all the file versions from VSS. Of dubious utility,
+              but what the hell.  Default is ExtractPath\VSS2Git.html
+
+Remote base URL - 
+
+Remote base path - 
                
 Hit the DUMP button.
 
@@ -35,12 +48,15 @@ I --STRONGLY-- recommend using test mode first.
 
 Wait.  It may take awhile.
 
+The program makes NO CHANGES to the VSS repository.  If the results are not
+to your liking, fix whatever the problem was and try it again.
 
 WHAT IT DOES:
 
 1. Get a list of all versions for all non-deleted items in VSS.
 
-2. Sort that list by the version date, file name in VSS, and version number.
+2. Sort that list by the VSS version date, VSS file name, and VSS version
+number.
 
 3. Iterate through the list.  Extract each file version, and add or update
 each individual file version to the new GIT repo.
