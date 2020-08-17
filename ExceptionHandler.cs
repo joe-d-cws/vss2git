@@ -93,7 +93,7 @@ namespace VSS2Git
                             object val = prop.GetValue(e, null);
                             if (!title)
                             {
-                                errorDesc.AppendLine("\r\n--------------  Properties:");
+                                errorDesc.AppendLine("\r\n--------------  Properties:\r\n");
                                 title = true;
                             }
                             AppendPropValue(errorDesc, name, val);
@@ -103,7 +103,7 @@ namespace VSS2Git
                     // error data collection
                     if (e.Data.Count != 0)
                     {
-                        errorDesc.AppendLine("\r\n--------------  Error data:");
+                        errorDesc.AppendLine("\r\n--------------  Error data:\r\n");
                         // Append the data collection.
                         foreach (DictionaryEntry de in e.Data)
                         {
@@ -119,7 +119,7 @@ namespace VSS2Git
                     if (e.InnerException != null)
                     {
                         // if there's an inner exception, print a seperator.
-                        errorDesc.AppendLine("\r\n\r\n*******************************************\r\nInner exception:");
+                        errorDesc.AppendLine("\r\n\r\n*******************************************\r\nInner exception:\r\n\r\n");
                     }
                     // process next exception
                     e = e.InnerException;

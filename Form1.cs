@@ -502,6 +502,7 @@ namespace VSS2Git
                 // so we will wait until there's a gap of more than 10 seconds between checkin dates to do the
                 // actual checkin.
                 // (gap interval is in gapInterval)
+
                 if (itemList[i].ItemType != 0)
                 {
                     project = itemList[i].FindProject();
@@ -521,20 +522,20 @@ namespace VSS2Git
                             int checkinGap = Convert.ToInt32((itemList[i].VersionDate - lastCommit).TotalSeconds) + gapInterval;
                             StatusMessage("Commit {0} items ({1})\r\n", commitCount, commitDate);
 
-                            // print a message saying why we are comitting.
+                            // print a message saying why we are committing.
                             if (project.Spec != currentProjectName)
                             {
-                                StatusMessage("Project name changed from {0} to {1}\r\n", currentProjectName, project.Spec);
+                                StatusMessage("Commit reason: Project name changed from {0} to {1}\r\n", currentProjectName, project.Spec);
                             }
                             else if (commits.Contains(itemList[i].Spec))
                             {
-                                StatusMessage("A version of {0} is already staged to commit.\r\n", itemList[i].Spec);
+                                StatusMessage("Commit reason: A previous version of {0} is already staged to commit.\r\n", itemList[i].Spec);
                             }
                             else if (itemList[i].VersionDate > lastCommit)
                             {
                                 if (checkinGap > gapInterval)
                                 {
-                                    StatusMessage("Checkin gap: {0}\r\n", checkinGap);
+                                    StatusMessage("Commit reason: Checkin gap: {0}\r\n", checkinGap);
                                 }
                             }
 

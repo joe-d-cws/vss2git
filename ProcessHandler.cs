@@ -8,50 +8,36 @@ namespace VSS2Git
 {
     public class ProcessHandler : IDisposable
     {
-        private string commandLine;
-        Process process;
         StringBuilder outputData;
-        string outputString;
-        IList<string> inputData;
-        bool waitForExit;
-        bool exited;
-        bool running;
-        string programName;
 
         public string CommandLine
         {
-            get
-            {
-                return commandLine;
-            }
-            set
-            {
-                commandLine = value;
-            }
+            get; set;
         }
 
         public string ProgramName
         {
-            get
-            {
-                return programName;
-            }
-            set
-            {
-                programName = value;
-            }
+            get; set; 
         }
 
         public bool WaitForExit
         {
-            get
-            {
-                return waitForExit;
-            }
-            set
-            {
-                waitForExit = value;
-            }
+            get; set;
+        }
+
+        public bool HasExited
+        {
+            get; set;
+        }
+
+        public bool Running
+        {
+            get; set;
+        }
+
+        public IList<String> ProgramInput
+        {
+            get; set;
         }
 
         public string ProgramOutput
@@ -62,56 +48,14 @@ namespace VSS2Git
                 {
                     return "";
                 }
-                if (outputString == null)
-                {
-                    outputString = outputData.ToString();
-                }
-                return outputString;
+                return outputData.ToString();
             }
         }
 
-        public IList<String> ProgramInput
-        {
-            get
-            {
-                return inputData;
-            }
-            set
-            {
-                inputData = value;
-            }
-        }
 
         public Process ProcessHandle
         {
-            get
-            {
-                return process;
-            }
-        }
-
-        public bool HasExited
-        {
-            get
-            {
-                return exited;
-            }
-            set
-            {
-                exited = value;
-            }
-        }
-
-        public bool Running
-        {
-            get
-            {
-                return running;
-            }
-            set
-            {
-                running = value;
-            }
+            get; internal set;
         }
 
         public int ExitCode
@@ -119,9 +63,9 @@ namespace VSS2Git
             get
             {
                 int result = 0;
-                if (process != null)
+                if (ProcessHandle != null)
                 {
-                    result = process.ExitCode;
+                    result = ProcessHandle.ExitCode;
                 }
                 return result;
             }
@@ -132,9 +76,9 @@ namespace VSS2Git
             get
             {
                 DateTime result = DateTime.MinValue;
-                if (process != null)
+                if (ProcessHandle != null)
                 {
-                    result = process.ExitTime;
+                    result = ProcessHandle.ExitTime;
                 }
                 return result;
             }
@@ -145,28 +89,23 @@ namespace VSS2Git
             Reset();
         }
 
-        public ProcessHandler(string command) 
+        public ProcessHandler(string command)
             : this()
         {
-            commandLine = command;
+            CommandLine = command;
         }
 
         public event EventHandler Exited;
 
         protected virtual void OnExited(EventArgs e)
         {
-            EventHandler handler = Exited;
-            if (handler != null)
-            {
-                // Invokes the delegates. 
-                handler(this, e);
-            }
+            Exited?.Invoke(this, e);
         }
 
         private void ExitHandler(object sender, System.EventArgs e)
         {
-            exited = true;
-            running = false;
+            HasExited = true;
+            Running = false;
             OnExited(e);
         }
 
@@ -184,72 +123,68 @@ namespace VSS2Git
 
             try
             {
-                if (process != null)
+                if (ProcessHandle != null)
                 {
-                    throw new Exception("Process already running");
+                    throw new Exception("Process already running.");
                 }
-                if (String.IsNullOrEmpty(commandLine) && String.IsNullOrEmpty(programName))
+                if (String.IsNullOrEmpty(CommandLine) && String.IsNullOrEmpty(ProgramName))
                 {
-                    throw new Exception("Command not set");
+                    throw new Exception("Command not set.");
                 }
 
-                process = new Process();
+                ProcessHandle = new Process();
                 outputData = new StringBuilder();
 
-                if (String.IsNullOrEmpty(programName))
+                if (String.IsNullOrEmpty(ProgramName))
                 {
-                    process.StartInfo.FileName = Environment.GetEnvironmentVariable("COMSPEC");
-                    process.StartInfo.Arguments = "/C " + commandLine;
+                    ProcessHandle.StartInfo.FileName = Environment.GetEnvironmentVariable("COMSPEC");
+                    ProcessHandle.StartInfo.Arguments = "/C " + CommandLine;
                 }
                 else
                 {
-                    process.StartInfo.FileName = programName;
-                    process.StartInfo.Arguments = commandLine;
-                    outputData.AppendFormat("{0} {1}\r\n", programName, commandLine);
+                    ProcessHandle.StartInfo.FileName = ProgramName;
+                    ProcessHandle.StartInfo.Arguments = CommandLine;
+                    outputData.AppendFormat("{0} {1}\r\n", ProgramName, CommandLine);
                 }
 
-                process.StartInfo.UseShellExecute = false;
-                process.StartInfo.RedirectStandardError = true;
-                if (inputData != null)
+                ProcessHandle.StartInfo.UseShellExecute = false;
+                ProcessHandle.StartInfo.RedirectStandardError = true;
+                if (ProgramInput != null)
                 {
-                    process.StartInfo.RedirectStandardInput = true;
+                    ProcessHandle.StartInfo.RedirectStandardInput = true;
                 }
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
-                //process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                ProcessHandle.StartInfo.RedirectStandardOutput = true;
+                ProcessHandle.StartInfo.CreateNoWindow = true;
+                ProcessHandle.StartInfo.WindowStyle = ProcessWindowStyle.Minimized;
+                //ProcessHandle.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
 
-                process.OutputDataReceived += new DataReceivedEventHandler(OutputHandler);
-                process.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
+                ProcessHandle.OutputDataReceived += new DataReceivedEventHandler(OutputHandler);
+                ProcessHandle.ErrorDataReceived += new DataReceivedEventHandler(OutputHandler);
 
-                process.EnableRaisingEvents = true;
+                ProcessHandle.EnableRaisingEvents = true;
 
-                process.Exited += ExitHandler;
+                ProcessHandle.Exited += ExitHandler;
 
-                running = true;
+                Running = true;
 
-                process.Start();
+                ProcessHandle.Start();
 
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
+                ProcessHandle.BeginOutputReadLine();
+                ProcessHandle.BeginErrorReadLine();
 
 
-                if (inputData != null)
+                if (ProgramInput != null)
                 {
-                    foreach (string input in inputData)
+                    foreach (string input in ProgramInput)
                     {
-                        process.StandardInput.WriteLine(input);
+                        ProcessHandle.StandardInput.WriteLine(input);
                     }
                 }
 
-                if (waitForExit)
+                if (WaitForExit)
                 {
-                    process.WaitForExit();
+                    ProcessHandle.WaitForExit();
                 }
-            }
-            catch
-            {
-                throw;
             }
             finally
             {
@@ -262,25 +197,24 @@ namespace VSS2Git
 
         public void Kill()
         {
-            if (process == null)
+            if (ProcessHandle == null)
             {
                 return;
             }
-            process.Kill();
+            ProcessHandle.Kill();
         }
 
         public void Reset()
         {
-            if (process != null)
+            if (ProcessHandle != null)
             {
-                process.Dispose();
-                process = null;
+                ProcessHandle.Dispose();
+                ProcessHandle = null;
             }
             outputData = new StringBuilder();
-            outputString = null;
-            inputData = null;
-            exited = false;
-            running = false;
+            ProgramInput = null;
+            HasExited = false;
+            Running = false;
         }
 
         #region IDisposable Members
@@ -296,38 +230,25 @@ namespace VSS2Git
         /// FALSE: Dispose unmanaged resources only</param>
         protected virtual void Dispose(bool disposing)
         {
-            try
+            // If this has already been called, return immediately
+            if (disposed)
             {
-                // If this has already been called, return immediately
-                if (disposed)
-                {
-                    return;
-                }
-
-                // if disposing is true, dispose was called from
-                // code, so dispose managed resources.
-                // if false, it was called by the runtime,
-                // so just dispose the unmanaged stuff, if any.
-                if (disposing)
-                {
-                    // dispose managed resources
-                    if (process != null)
-                    {
-                        process.Dispose();
-                        process = null;
-                    }
-                    outputData = null;
-                }
-
-                // dispose any unmanaged resources here
-
-                // set flag so we don't call this again.
-                disposed = true;
+                return;
             }
-            catch
+
+            // dispose managed resources
+            if (ProcessHandle != null)
             {
-                throw;
+                ProcessHandle.Dispose();
+                ProcessHandle = null;
             }
+
+            outputData = null;
+
+            // dispose any unmanaged resources here
+
+            // set flag so we don't call this again.
+            disposed = true;
         }
 
         /// <summary>
@@ -335,18 +256,11 @@ namespace VSS2Git
         /// </summary>
         public void Dispose()
         {
-            try
-            {
-                // Dispose resources
-                Dispose(true);
-                // remove this from the finalization queue,
-                // since we just disposed everything.
-                GC.SuppressFinalize(this);
-            }
-            catch
-            {
-                throw;
-            }
+            // Dispose resources
+            Dispose(true);
+            // remove this from the finalization queue,
+            // since we just disposed everything.
+            GC.SuppressFinalize(this);
         }
         #endregion
 

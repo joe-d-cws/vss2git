@@ -59,7 +59,9 @@ WHAT IT DOES:
 number.
 
 3. Iterate through the list.  Extract each file version, and add or update
-each individual file version to the new GIT repo.
+each individual file version to the new GIT repo. A .gitignore will be
+created if it does not already exist.  It's the default Visual Studio 
+.gitignore that's included in this project as an embedded resource.
 
 4. When the version date or the project name changes, commit all the updates.
 
