@@ -375,7 +375,7 @@ namespace VSS2Git
         {
             ChangeDirectory(projectPath);
 
-            if (!String.IsNullOrEmpty(gitIgnore) && !File.Exists(".gitignore"))
+            if (!testMode && !String.IsNullOrEmpty(gitIgnore) && !File.Exists(".gitignore"))
             {
                 StatusMessage("Creating .gitignore\r\n");
                 File.WriteAllText(".gitignore", gitIgnore);
@@ -451,7 +451,13 @@ namespace VSS2Git
 
             if (rootPath.StartsWith("$/") && rootPath.Length > 2)
             {
-                rootStrip = rootPath.Substring(2) + "/";
+                rootStrip = Path.GetDirectoryName(rootPath.Substring(2)) ?? "";
+                // GetDirectoryName will convert / to \.  Reverse that.
+                rootStrip = rootStrip.Replace('\\', '/');
+                if (!rootStrip.EndsWith("/"))
+                {
+                    rootStrip = rootStrip + "/";
+                }
             }
             else
             {
