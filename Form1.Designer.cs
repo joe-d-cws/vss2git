@@ -48,11 +48,13 @@
             this.label17 = new System.Windows.Forms.Label();
             this.txtReport = new System.Windows.Forms.TextBox();
             this.statLabel = new System.Windows.Forms.Label();
+            this.label6 = new System.Windows.Forms.Label();
+            this.txtRemote = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // btnDump
             // 
-            this.btnDump.Location = new System.Drawing.Point(13, 148);
+            this.btnDump.Location = new System.Drawing.Point(10, 211);
             this.btnDump.Name = "btnDump";
             this.btnDump.Size = new System.Drawing.Size(68, 24);
             this.btnDump.TabIndex = 12;
@@ -111,7 +113,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 124);
+            this.label4.Location = new System.Drawing.Point(8, 123);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(65, 13);
             this.label4.TabIndex = 8;
@@ -128,7 +130,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(8, 96);
+            this.label5.Location = new System.Drawing.Point(8, 95);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(47, 13);
             this.label5.TabIndex = 10;
@@ -144,7 +146,7 @@
             // 
             // txtStatus
             // 
-            this.txtStatus.Location = new System.Drawing.Point(14, 210);
+            this.txtStatus.Location = new System.Drawing.Point(11, 273);
             this.txtStatus.Multiline = true;
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -154,7 +156,7 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(15, 182);
+            this.lblStatus.Location = new System.Drawing.Point(12, 245);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(0, 13);
             this.lblStatus.TabIndex = 26;
@@ -164,7 +166,7 @@
             this.chkTest.AutoSize = true;
             this.chkTest.Checked = true;
             this.chkTest.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkTest.Location = new System.Drawing.Point(98, 153);
+            this.chkTest.Location = new System.Drawing.Point(95, 216);
             this.chkTest.Name = "chkTest";
             this.chkTest.Size = new System.Drawing.Size(47, 17);
             this.chkTest.TabIndex = 13;
@@ -206,16 +208,34 @@
             // statLabel
             // 
             this.statLabel.AutoSize = true;
-            this.statLabel.Location = new System.Drawing.Point(8, 294);
+            this.statLabel.Location = new System.Drawing.Point(5, 357);
             this.statLabel.Name = "statLabel";
             this.statLabel.Size = new System.Drawing.Size(0, 13);
             this.statLabel.TabIndex = 3;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(8, 151);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(98, 13);
+            this.label6.TabIndex = 32;
+            this.label6.Text = "Remote Repo URL";
+            // 
+            // txtRemote
+            // 
+            this.txtRemote.Location = new System.Drawing.Point(120, 148);
+            this.txtRemote.Name = "txtRemote";
+            this.txtRemote.Size = new System.Drawing.Size(232, 20);
+            this.txtRemote.TabIndex = 33;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(873, 406);
+            this.ClientSize = new System.Drawing.Size(873, 537);
+            this.Controls.Add(this.txtRemote);
+            this.Controls.Add(this.label6);
             this.Controls.Add(this.txtReport);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.txtLog);
@@ -264,6 +284,8 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox txtReport;
         private System.Windows.Forms.Label statLabel;
+        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.TextBox txtRemote;
     }
 }
 
