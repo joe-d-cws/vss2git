@@ -732,11 +732,6 @@ namespace VSS2Git
 
                 if (!String.IsNullOrEmpty(pi.RemoteRepoPath))
                 {
-                    //git remote rename origin old - origin
-                    //git remote add origin https://whatever.git
-                    //git push -u origin --all
-                    //git push -u origin --tags
-
                     createRemoteRepo.AppendFormat("git init --bare \"{0}\"\r\n", pi.RemoteRepoPath);
                 }
 
@@ -745,16 +740,6 @@ namespace VSS2Git
                     pushRemoteRepo.AppendFormat("cd \"{0}\"\r\n", pi.Path);
                     pushRemoteRepo.AppendFormat("git remote add origin \"{0}\"\r\n", pi.RemoteRepoUrl);
                     pushRemoteRepo.Append("git push -u origin master\r\n");
-
-
-                    //string cmdLine;
-                    //cmdLine = String.Format("git remote add origin \"{0}\"", pi.RemoteRepo);
-                    //RunCommand(cmdLine);
-                    //RunCommand("git remote rename origin old-origin");
-                    //cmdLine = String.Format("git remote add origin \"{0}\"", pi.RemoteRepo);
-                    //RunCommand(cmdLine);
-                    //RunCommand("git push -u origin --all");
-                    //RunCommand("git push -u origin --tags");
                 }
                 RunCommand("git status");
 
@@ -765,14 +750,25 @@ namespace VSS2Git
                 Directory.SetCurrentDirectory(curDir);
             }
 
-            gitProjectList.Sort();
+            if (gitProjectList.Count > 0)
+            {
+                gitProjectList.Sort();
 
-            TextForm gpl = new TextForm(gitProjectList, "Suggested list of remote project names");
-            gpl.Show();
-            TextForm cr = new TextForm(createRemoteRepo.ToString(), "Commands to create remote repo(s)");
-            cr.Show();
-            TextForm pr = new TextForm(pushRemoteRepo.ToString(), "Commands to push to remote repos");
-            pr.Show();
+                TextForm gpl = new TextForm(gitProjectList, "Suggested list of remote project names");
+                gpl.Show();
+            }
+
+            if (createRemoteRepo.Length > 0)
+            {
+                TextForm cr = new TextForm(createRemoteRepo.ToString(), "Commands to create remote repo(s)");
+                cr.Show();
+            }
+
+            if (pushRemoteRepo.Length > 0)
+            {
+                TextForm pr = new TextForm(pushRemoteRepo.ToString(), "Commands to push to remote repos");
+                pr.Show();
+            }
 
             StatusMessage("Total checkins: {0}\r\n", checkinCount);
             SetStatusLabel("Done.");
