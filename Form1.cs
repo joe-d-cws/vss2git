@@ -690,16 +690,22 @@ namespace VSS2Git
 
                 if (!String.IsNullOrEmpty(pi.Repo))
                 {
-                    //pi.Repo = pi.Repo.Replace(' ', '-');
-                    //string cmdLine;
-                    //cmdLine = String.Format("git init --bare \"{0}\"", pi.Repo);
-                    //RunCommand(cmdLine);
-                    //cmdLine = String.Format("git remote add origin \"{0}\"", pi.Repo);
-                    //RunCommand(cmdLine);
-                    ////RunCommand("git remote -v");
-                    ////RunCommand("git status");
+                    //git remote rename origin old - origin
+                    //git remote add origin https://whatever.git
+                    //git push -u origin --all
+                    //git push -u origin --tags
+
+
+                    pi.Repo = pi.Repo.Replace(' ', '-');
+                    string cmdLine;
+                    cmdLine = String.Format("git remote rename origin old-origin", pi.Repo);
+                    RunCommand(cmdLine);
+                    cmdLine = String.Format("git remote add origin \"{0}\"", pi.Repo);
+                    RunCommand(cmdLine);
+                    //RunCommand("git push -u origin --all");
+                    //RunCommand("git push -u origin --tags");
                     //RunCommand("git push origin master");
-                    ////RunCommand("git status");
+                    RunCommand("git status");
                 }
 
             }
@@ -747,7 +753,7 @@ namespace VSS2Git
 
                 SaveConfig(configFileName);
 
-                gitIgnore = GetResource("gitignore.txt");
+                gitIgnore = GetResource(".gitignore");
 
                 sbStatus = new StringBuilder();
                 lblStatus.Text = "";
@@ -774,7 +780,6 @@ namespace VSS2Git
                     MessageBox.Show("Extract path " + extractPath + " is not empty.  Clean it out and try again.");
                     return;
                 }
-
 
                 // Create database instance...
                 IVSSDatabase vssDatabase = new VSSDatabase();
