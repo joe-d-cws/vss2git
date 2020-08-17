@@ -653,7 +653,7 @@ namespace VSS2Git
                                     currentRemoteRepoUrl = gitRepoName;
                                 }
 
-                                projectXref.Add(String.Format("{0} -> {1}\r\n", project.Spec, gitRepoName));
+                                projectXref.Add(String.Format("{0} -> {1}", project.Spec, gitRepoName));
 
                                 // strip the $/ from the start of the item spec, and replace / with \
                                 currentProjectPath = Path.Combine(extractPath, currentProjectPath.Replace('/', '\\'));
