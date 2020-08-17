@@ -122,6 +122,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="gitignore.txt" />
     <Content Include="readme.txt" />
     <Content Include="vss.ico" />
   </ItemGroup>

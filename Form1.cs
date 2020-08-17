@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Windows.Forms;
 using Microsoft.Win32;
@@ -27,6 +28,7 @@ namespace VSS2Git
         private DateTime latestDate;
         string configFileName = "";
         string rootPath = "";
+        string gitIgnore = "";
 
         private const string DateFormat = "yyyy-MM-dd HH:mm:ss";
 
@@ -362,6 +364,12 @@ namespace VSS2Git
         {
             ChangeDirectory(projectPath);
 
+            if (!String.IsNullOrEmpty(gitIgnore) && !File.Exists(".gitignore"))
+            {
+                StatusMessage("Creating .gitignore\r\n");
+                File.WriteAllText(".gitignore", gitIgnore);
+            }
+
             RunCommand("git init");
         }
 
@@ -646,6 +654,24 @@ namespace VSS2Git
             SetStatusLabel("Done.");
         }
 
+        public string GetResource(Assembly asm, string resourceName)
+        {
+            string resName = asm.GetName().Name + "." + resourceName;
+            using (Stream s = asm.GetManifestResourceStream(resName))
+            {
+                if (s != null)
+                {
+                    using (StreamReader sr = new StreamReader(s))
+                    {
+                        return sr.ReadToEnd();
+                    }
+                }
+            }
+
+            return "";
+        }
+
+
         private void DumpVssDatabase()
         {
             rootPath = txtSSRoot.Text;
@@ -653,6 +679,8 @@ namespace VSS2Git
             Cursor oldCursor = this.Cursor;
 
             SaveConfig(configFileName);
+
+            gitIgnore = GetResource(Assembly.GetExecutingAssembly(), "gitignore.txt");
 
             try
             {
