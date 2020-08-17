@@ -191,7 +191,7 @@
             this.txtCommit.Name = "txtCommit";
             this.txtCommit.Size = new System.Drawing.Size(500, 20);
             this.txtCommit.TabIndex = 10;
-            this.txtCommit.Text = "fossil commit --date-override \"{0}\" -m \"{1}\" --no-warnings --allow-older";
+            this.txtCommit.Text = "git commit -a -m \"{1}\"";
             // 
             // label7
             // 
@@ -208,7 +208,7 @@
             this.txtAdd.Name = "txtAdd";
             this.txtAdd.Size = new System.Drawing.Size(500, 20);
             this.txtAdd.TabIndex = 8;
-            this.txtAdd.Text = "fossil add \"{0}\"";
+            this.txtAdd.Text = "git add \"{0}\"";
             // 
             // label8
             // 
@@ -225,7 +225,6 @@
             this.txtUpdate.Name = "txtUpdate";
             this.txtUpdate.Size = new System.Drawing.Size(500, 20);
             this.txtUpdate.TabIndex = 9;
-            this.txtUpdate.Text = "fossil add \"{0}\"";
             // 
             // label9
             // 
@@ -242,7 +241,7 @@
             this.txtOpen.Name = "txtOpen";
             this.txtOpen.Size = new System.Drawing.Size(500, 20);
             this.txtOpen.TabIndex = 7;
-            this.txtOpen.Text = "fossil open \"filename\"";
+            this.txtOpen.Text = "git init";
             // 
             // label10
             // 
@@ -286,7 +285,6 @@
             this.txtClose.Name = "txtClose";
             this.txtClose.Size = new System.Drawing.Size(500, 20);
             this.txtClose.TabIndex = 11;
-            this.txtClose.Text = "fossil close";
             // 
             // label14
             // 
@@ -330,7 +328,6 @@
             this.txtCreate.Name = "txtCreate";
             this.txtCreate.Size = new System.Drawing.Size(500, 20);
             this.txtCreate.TabIndex = 6;
-            this.txtCreate.Text = "fossil new \"filename\" --date-override \"{1}\"";
             // 
             // label16
             // 

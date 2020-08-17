@@ -42,24 +42,11 @@ NOTE: If a command is not necessary, leave it blank.
 
 6. Wait.  It may take awhile.
 
-COMMANDS FOR FOSSIL:
-
-Create: fossil new "repository-filename"
-
-Open: fossil open "repository-filename"
-
-Add: fossil add "{0}"
-
-Update: fossil add "{0}"
-
-Commit: fossil commit --date-override "{0}" -m "{1}" --no-warnings --allow-older
-
-Close: fossil close
 
 COMMANDS FOR GIT:
 Create: none - leave blank
 
-Open: none - leave blank
+Open: git init
 
 Add: git add "{0}"
 
