@@ -21,7 +21,6 @@ namespace VSS2Git
         private string lastChangeDir = "";
         private string extractPath;
         private string logFile;
-        private string cmdLogFile;
         private StringBuilder sbStatus;
         private bool testMode;
         private DateTime earliestDate;
@@ -50,7 +49,6 @@ namespace VSS2Git
                 txtExtractPath.Text = Environment.ExpandEnvironmentVariables(txtExtractPath.Text);
                 txtLog.Text = Path.Combine(txtExtractPath.Text, "VSS2Git.log");
                 txtReport.Text = Path.Combine(txtExtractPath.Text, "VSS2Git.html");
-                txtCmdLog.Text = Path.Combine(txtExtractPath.Text, "VSS2Git-commands.txt");
 
                 // Set default database and user names
 
@@ -91,11 +89,10 @@ namespace VSS2Git
                                            "ExtractPath={4}\r\n" +
                                            "LogFile={5}\r\n" +
                                            "ReportFile={6}\r\n" +
-                                           "CommandLog={7}\r\n" +
-                                           "TestMode={8}\r\n",
+                                           "TestMode={7}\r\n",
                                            txtVss.Text, txtSSUser.Text, txtSSPassword.Text, txtSSRoot.Text,
-                                           txtExtractPath.Text, 
-                                           txtLog.Text, txtReport.Text, txtCmdLog.Text, chkTest.Checked.ToString());
+                                           txtExtractPath.Text,
+                                           txtLog.Text, txtReport.Text, chkTest.Checked.ToString());
 
             try
             {
@@ -109,28 +106,29 @@ namespace VSS2Git
         private bool LoadConfig(string fileName)
         {
             string[] lines;
-            try 
+            try
             {
                 lines = File.ReadAllLines(fileName);
             }
-            catch 
+            catch
             {
                 lines = null;
             }
-            if (lines == null || lines.Length == 0) 
+            if (lines == null || lines.Length == 0)
             {
                 return false;
             }
-            foreach (string line in lines) 
+            foreach (string line in lines)
             {
                 int eqPos = line.IndexOf('=');
-                if (eqPos >= 0) {
+                if (eqPos >= 0)
+                {
                     string settingValue;
-                    if (eqPos + 1 < line.Length) 
+                    if (eqPos + 1 < line.Length)
                     {
                         settingValue = line.Substring(eqPos + 1);
                     }
-                    else 
+                    else
                     {
                         settingValue = "";
                     }
@@ -161,10 +159,6 @@ namespace VSS2Git
                     else if (line.StartsWith("ReportFile=", StringComparison.CurrentCultureIgnoreCase))
                     {
                         txtReport.Text = settingValue;
-                    }
-                    else if (line.StartsWith("CommandLog=", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        txtCmdLog.Text = settingValue;
                     }
                     else if (line.StartsWith("TestMode=", StringComparison.CurrentCultureIgnoreCase))
                     {
@@ -200,10 +194,6 @@ namespace VSS2Git
             if (String.IsNullOrEmpty(commandLine))
             {
                 return;
-            }
-            if (!String.IsNullOrEmpty(cmdLogFile))
-            {
-                File.AppendAllText(cmdLogFile, commandLine + "\r\n");
             }
             if (testMode)
             {
@@ -306,7 +296,7 @@ namespace VSS2Git
                 return;
             }
             TextWriter tr = new StreamWriter(fileName);
-            tr.Write("<HTML>\r\n" + 
+            tr.Write("<HTML>\r\n" +
                      "<HEAD>\r\n" +
                      "<STYLE>\r\n" +
                      "table, th, td {\r\n" +
@@ -376,19 +366,41 @@ namespace VSS2Git
             RunCommand("git init");
         }
 
+        private void GitAdd(string projectPath, string fileName, string comment)
+        {
+            ChangeDirectory(projectPath);
+
+            RunCommand(String.Format("git add \"{0}\"", fileName));
+        }
+
         private void GitCommit(string projectPath, string comment, string date)
         {
+            string newComment = "";
+
+            if (!String.IsNullOrEmpty(date))
+            {
+                newComment += date;
+            }
+            if (!String.IsNullOrEmpty(comment))
+            {
+                if (newComment.Length > 0)
+                {
+                    newComment += " - ";
+                }
+                newComment += comment;
+            }
+
             ChangeDirectory(projectPath);
 
             RunCommand("git add .");
 
-            if (String.IsNullOrEmpty(comment))
+            if (String.IsNullOrEmpty(newComment))
             {
                 RunCommand(String.Format("git commit -a --allow-empty-message"));
             }
             else
             {
-                RunCommand(String.Format("git commit -a -m \"{0}\"", comment));
+                RunCommand(String.Format("git commit -a -m \"{0}\"", date, newComment));
             }
         }
 
@@ -411,6 +423,8 @@ namespace VSS2Git
             ItemInfo project = null;
             string currentProjectName = "";
             string currentProjectPath = "";
+            bool extracted;
+
 
             // Make sure the base path exists,
             // then make it the current directory
@@ -460,7 +474,7 @@ namespace VSS2Git
                         commitDate = lastCommit.ToString(DateFormat);
                         // checkin time gap found, commit
                         SetStatusLabel(commitDate);
-                        string msg = String.Format("Commit {0} items ({1})\r\nCheckin gap: {2:0000000}\r\n", commitCount, commitDate, (itemList[i].VersionDate - lastCommit).TotalSeconds+checkinGap);
+                        string msg = String.Format("Commit {0} items ({1})\r\nCheckin gap: {2:0000000}\r\n", commitCount, commitDate, (itemList[i].VersionDate - lastCommit).TotalSeconds + checkinGap);
                         StatusMessage(msg);
                         commitCount = 0;
                         checkinCount += 1;
@@ -513,6 +527,7 @@ namespace VSS2Git
                         {
                             if (commitCount != 0)
                             {
+                                commitDate = lastCommit.ToString(DateFormat);
                                 // current project has changed.
                                 GitCommit(currentProjectPath, commitComment, commitDate);
                             }
@@ -571,7 +586,7 @@ namespace VSS2Git
                     CheckPath(pathName);
 
                     string getName = fileName;
-                    
+
                     isDirectory = false;
 
                     newFile = !File.Exists(fileName);
@@ -588,29 +603,36 @@ namespace VSS2Git
                         // I've seen this fail if older versions of the file are missing.
                         if (!testMode)
                         {
-                            bool extracted;
-
                             // delete any existing version of the file
                             File.Delete(getName);
+                        }
 
-                            try
+                        try
+                        {
+                            if (!testMode)
                             {
                                 itemList[i].VSSItem.Get(ref getName, (int)VSSFlags.VSSFLAG_CMPFAIL);
-                                extracted = true;
                             }
-                            catch (Exception ex)
-                            {
-                                extracted = false;
-                                StatusMessage(ex.Message);
-                            }
+                            extracted = true;
+                        }
+                        catch (Exception ex)
+                        {
+                            extracted = false;
+                            StatusMessage(ex.Message);
+                        }
 
-                            if (extracted)
+                        if (extracted)
+                        {
+                            if (!testMode)
                             {
                                 // set the file date to the checkin time.
                                 File.SetAttributes(fileName, FileAttributes.Normal);
                                 File.SetCreationTime(fileName, itemList[i].VersionDate);
                                 File.SetLastWriteTime(fileName, itemList[i].VersionDate);
                             }
+
+                            // add changed file
+                            //GitAdd(currentProjectPath, fileName, itemList[i].Comment ?? "");
                         }
                         commitCount += 1;
                     }
@@ -642,7 +664,6 @@ namespace VSS2Git
                 // get various settings from the UI
                 extractPath = txtExtractPath.Text.Trim();
                 logFile = txtLog.Text.Trim();
-                cmdLogFile = txtCmdLog.Text.Trim();
                 testMode = chkTest.Checked;
                 earliestDate = DateTime.MaxValue;
                 latestDate = DateTime.MinValue;

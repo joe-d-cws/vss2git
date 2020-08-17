@@ -47,15 +47,12 @@
             this.txtLog = new System.Windows.Forms.TextBox();
             this.label17 = new System.Windows.Forms.Label();
             this.txtReport = new System.Windows.Forms.TextBox();
-            this.chkAutoProject = new System.Windows.Forms.CheckBox();
-            this.label19 = new System.Windows.Forms.Label();
-            this.txtCmdLog = new System.Windows.Forms.TextBox();
             this.statLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnDump
             // 
-            this.btnDump.Location = new System.Drawing.Point(10, 318);
+            this.btnDump.Location = new System.Drawing.Point(13, 148);
             this.btnDump.Name = "btnDump";
             this.btnDump.Size = new System.Drawing.Size(68, 24);
             this.btnDump.TabIndex = 12;
@@ -147,7 +144,7 @@
             // 
             // txtStatus
             // 
-            this.txtStatus.Location = new System.Drawing.Point(11, 379);
+            this.txtStatus.Location = new System.Drawing.Point(14, 210);
             this.txtStatus.Multiline = true;
             this.txtStatus.Name = "txtStatus";
             this.txtStatus.ScrollBars = System.Windows.Forms.ScrollBars.Both;
@@ -157,7 +154,7 @@
             // lblStatus
             // 
             this.lblStatus.AutoSize = true;
-            this.lblStatus.Location = new System.Drawing.Point(12, 352);
+            this.lblStatus.Location = new System.Drawing.Point(15, 182);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(0, 13);
             this.lblStatus.TabIndex = 26;
@@ -165,7 +162,9 @@
             // chkTest
             // 
             this.chkTest.AutoSize = true;
-            this.chkTest.Location = new System.Drawing.Point(95, 323);
+            this.chkTest.Checked = true;
+            this.chkTest.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkTest.Location = new System.Drawing.Point(98, 153);
             this.chkTest.Name = "chkTest";
             this.chkTest.Size = new System.Drawing.Size(47, 17);
             this.chkTest.TabIndex = 13;
@@ -204,32 +203,6 @@
             this.txtReport.Size = new System.Drawing.Size(293, 20);
             this.txtReport.TabIndex = 31;
             // 
-            // chkAutoProject
-            // 
-            this.chkAutoProject.AutoSize = true;
-            this.chkAutoProject.Location = new System.Drawing.Point(165, 323);
-            this.chkAutoProject.Name = "chkAutoProject";
-            this.chkAutoProject.Size = new System.Drawing.Size(187, 17);
-            this.chkAutoProject.TabIndex = 33;
-            this.chkAutoProject.Text = "Auto Project/Repository Creation?";
-            this.chkAutoProject.UseVisualStyleBackColor = true;
-            // 
-            // label19
-            // 
-            this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(367, 68);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(75, 13);
-            this.label19.TabIndex = 34;
-            this.label19.Text = "Command Log";
-            // 
-            // txtCmdLog
-            // 
-            this.txtCmdLog.Location = new System.Drawing.Point(452, 65);
-            this.txtCmdLog.Name = "txtCmdLog";
-            this.txtCmdLog.Size = new System.Drawing.Size(293, 20);
-            this.txtCmdLog.TabIndex = 35;
-            // 
             // statLabel
             // 
             this.statLabel.AutoSize = true;
@@ -242,10 +215,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(873, 571);
-            this.Controls.Add(this.txtCmdLog);
-            this.Controls.Add(this.label19);
-            this.Controls.Add(this.chkAutoProject);
+            this.ClientSize = new System.Drawing.Size(873, 406);
             this.Controls.Add(this.txtReport);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.txtLog);
@@ -293,9 +263,6 @@
         private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox txtReport;
-        private System.Windows.Forms.CheckBox chkAutoProject;
-        private System.Windows.Forms.Label label19;
-        private System.Windows.Forms.TextBox txtCmdLog;
         private System.Windows.Forms.Label statLabel;
     }
 }
