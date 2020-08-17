@@ -65,11 +65,12 @@
             this.label17 = new System.Windows.Forms.Label();
             this.txtReport = new System.Windows.Forms.TextBox();
             this.label18 = new System.Windows.Forms.Label();
+            this.chkAutoProject = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // btnDump
             // 
-            this.btnDump.Location = new System.Drawing.Point(651, 117);
+            this.btnDump.Location = new System.Drawing.Point(651, 68);
             this.btnDump.Name = "btnDump";
             this.btnDump.Size = new System.Drawing.Size(68, 24);
             this.btnDump.TabIndex = 12;
@@ -306,7 +307,7 @@
             // chkTest
             // 
             this.chkTest.AutoSize = true;
-            this.chkTest.Location = new System.Drawing.Point(743, 121);
+            this.chkTest.Location = new System.Drawing.Point(743, 72);
             this.chkTest.Name = "chkTest";
             this.chkTest.Size = new System.Drawing.Size(47, 17);
             this.chkTest.TabIndex = 13;
@@ -370,11 +371,22 @@
             this.label18.TabIndex = 32;
             this.label18.Text = "{0} - Extract Path {1} - Timestamp";
             // 
+            // chkAutoProject
+            // 
+            this.chkAutoProject.AutoSize = true;
+            this.chkAutoProject.Location = new System.Drawing.Point(655, 103);
+            this.chkAutoProject.Name = "chkAutoProject";
+            this.chkAutoProject.Size = new System.Drawing.Size(187, 17);
+            this.chkAutoProject.TabIndex = 33;
+            this.chkAutoProject.Text = "Auto Project/Repository Creation?";
+            this.chkAutoProject.UseVisualStyleBackColor = true;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(873, 545);
+            this.Controls.Add(this.chkAutoProject);
             this.Controls.Add(this.label18);
             this.Controls.Add(this.txtReport);
             this.Controls.Add(this.label17);
@@ -457,6 +469,7 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox txtReport;
         private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.CheckBox chkAutoProject;
     }
 }
 

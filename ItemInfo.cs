@@ -44,6 +44,8 @@ namespace VSS2Git
         public string LabelComment { get; set; }
         public string UserName { get; set; }
         public IVSSItem VSSItem { get; private set; }
+
+        public int ChildCount { get; set; }
     }
 
     public class ItemInfoComparer : IComparer<ItemInfo>

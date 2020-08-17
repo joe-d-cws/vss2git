@@ -16,6 +16,7 @@ namespace VSS2Git
     {
         private int checkinGap;
         private List<ItemInfo> itemList;
+        private List<ItemInfo> projectList;
         private string lastCheckPath = "";
         private string extractPath;
         private string logFile;
@@ -271,6 +272,8 @@ namespace VSS2Git
                 StatusMessage("{0}\r\n", vssItem.Spec);
                 SetStatusLabel(vssItem.Spec);
 
+                ItemInfo project = new ItemInfo(vssItem, vssItem.VSSVersion);
+
                 // Now process all the children of this project
                 foreach (IVSSItem item in vssItem.get_Items(true))
                 {
@@ -280,6 +283,8 @@ namespace VSS2Git
             else
             {
                 // process a file.
+
+                StatusMessage("1 {0}\r\n", vssItem.Spec);
 
                 // Get each version of this file, and save to the version list.
                 foreach (IVSSVersion vssVersion in vssItem.get_Versions(0))
@@ -620,7 +625,11 @@ namespace VSS2Git
                 latestDate = DateTime.MinValue;
                 checkinGap = 10;
                 itemList = new List<ItemInfo>();
+                projectList = new List<ItemInfo>();
                 lastCheckPath = "";
+
+                // Make sure the base path exists,
+                CheckPath(extractPath);
 
                 // Create database instance...
                 IVSSDatabase vssDatabase = new VSSDatabase();
