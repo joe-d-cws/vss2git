@@ -414,6 +414,19 @@ namespace VSS2Git
             lastChangeDir = newdir;
         }
 
+        private bool DeleteFile(string fileName)
+        {
+            try
+            {
+                File.Delete(fileName);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
         private void GitInit(string projectPath)
         {
             ChangeDirectory(projectPath);
@@ -452,6 +465,14 @@ namespace VSS2Git
             }
 
             ChangeDirectory(projectPath);
+
+            if (!testMode)
+            {
+                DeleteFile("*.scc");
+                DeleteFile("*.vspscc");
+                DeleteFile("*.vssscc");
+            }
+
 
             RunCommand("git add -A");
 
@@ -742,7 +763,7 @@ namespace VSS2Git
                         if (!testMode)
                         {
                             // delete any existing version of the file
-                            File.Delete(getName);
+                            DeleteFile(getName);
                         }
 
                         extracted = false;
