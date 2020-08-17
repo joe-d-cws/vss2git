@@ -680,13 +680,15 @@ namespace VSS2Git
 
                             // add changed file
                             // Note: This git add is not needed, but can be uncommented if you want.
-                            // The program will do a "git add ." before the commit.
+                            // The program will do a "git add -A" before the commit.
                             //GitAdd(currentProjectPath, fileName, itemList[i].Comment ?? "");
                             commitCount += 1;
                         }
                     }
                 }
             }
+
+            cleanup.Sort(new ProjectInfoComparer());
 
             foreach (ProjectInfo pi in cleanup)
             {
@@ -698,13 +700,16 @@ namespace VSS2Git
 
                 if (!String.IsNullOrEmpty(pi.Repo))
                 {
-                    pi.Repo = pi.Repo.Replace(' ', '-');
-                    string cmdLine = String.Format("git remote add origin \"{0}\"\r\n", pi.Repo);
-                    StatusMessage("{0}\r\n", cmdLine);
-                    // RunCommand(cmdLine);
-                    // RunCommand("git remote -v");
-                    StatusMessage("git push origin master\r\n");
+                    //pi.Repo = pi.Repo.Replace(' ', '-');
+                    //string cmdLine;
+                    //cmdLine = String.Format("git init --bare \"{0}\"", pi.Repo);
+                    //RunCommand(cmdLine);
+                    //cmdLine = String.Format("git remote add origin \"{0}\"", pi.Repo);
+                    //RunCommand(cmdLine);
+                    ////RunCommand("git remote -v");
+                    ////RunCommand("git status");
                     //RunCommand("git push origin master");
+                    ////RunCommand("git status");
                 }
 
             }
