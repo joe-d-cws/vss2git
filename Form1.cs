@@ -206,6 +206,7 @@ namespace VSS2Git
             {
                 return;
             }
+            StatusMessage("----------------------------------\r\n");
             lblStatus.Text = message;
             lblProgress.Text = "";
             lblStatus.Refresh();
