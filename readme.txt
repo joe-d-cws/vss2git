@@ -1,11 +1,21 @@
 ﻿
 VSS2Git will extract files from a Visual Source Safe repository and check
-them in to a new Git repository, and preserve the version history.
+them in to a new Git repository, while preserving the VSS version history.
 
 It makes NO CHANGES to the VSS repository.
 
 It will also OPTIONALLY generate commands to create remote repositories, but 
 it will not run them.  You have to do that.
+
+NOTE:
+
+You MUST have Visual Source Safe actually installed on the system you are
+running this on.  If not, you will get this error:
+
+Retrieving the COM class factory for component with CLSID 
+{783CD4E4-9D54-11CF-B8EE-00608CC9A71F} failed due to the following error: 
+80040154 Class not registered (Exception from HRESULT: 0x80040154 
+(REGDB_E_CLASSNOTREG)).
 
 HOW TO USE:
 
@@ -45,7 +55,11 @@ SS Root - Root VSS path to extract.  Default is $/ for the whole thing,
           but you can do a single project or tree if you want.
           
 Extract path - A temporary directory to extract the files to.  It will be
-               created if necessary.  Default is %TEMP%\VSS2Git
+               created if necessary.  If it already exists, any contents
+               will be deleted.
+               Default is %TEMP%\VSS2Git
+               DO NOT set this to your existing source code directory.
+               This is where the new git local repos will be created.
 
 Log file - Saves all output.  Default is ExtractPath\VSS2Git.log
 
@@ -53,18 +67,6 @@ Report file - Report of all the file versions from VSS. Of dubious utility,
               but what the hell.  Default is ExtractPath\VSS2Git.html
 
 Remote base URL - OPTIONAL - Base url of remote git repo.
-
-Push to remote repo when complete - Automatically push to the
-remote repo when everything's done.  This assumes that the projects already
-exist on the remote, or that they will be automatically created on the
-first push.
-
-Flatten - Flatten VSS project names.  If you have a project in VSS like
-/long/path/to/the/project/projectname, it will truncate the path to
-projectname.git.  If there is already a project by that name, it will append
-a counter to it and increment until it gets to an unused name.  If this is 
-not selected, the project will be the full 
-/long/path/to/the/project/projectname.git. 
 
 For example, if you have all your projects saved to a remote repo
 at https://www.example.com/code/repo/path-to-project, the base url is
@@ -77,10 +79,22 @@ If you're not going to push to a remote repo, leave this blank.
 
 Remote base path - OPTIONAL - The base path in the remote repo.
 
-For example, if all your project is in /home/username/git/path-to-project,
+For example, if your project is in /home/username/git/path-to-project,
 the base path is /home/username/git.
 
 If you're not going to push to a remote repo, leave this blank.
+
+Push to remote repo when complete - Automatically push to the
+remote repo when everything's done.  This assumes that the projects already
+exist on the remote, or that they will be automatically created on the
+first push.
+
+Flatten - Flatten VSS project names.  If you have a project in VSS like
+/long/path/to/the/project/projectname, it will truncate the path to
+projectname.git.  If there is already a project by that name, it will append
+a counter to it and increment until it gets to an unused name.  If this is 
+not selected, the project will be the full 
+/long/path/to/the/project/projectname.git. 
                
 Hit the DUMP button.
 
@@ -90,6 +104,14 @@ Wait.  It may take awhile.
 
 The program makes NO CHANGES to the VSS repository.  If the results are not
 to your liking, fix whatever the problem was and try it again.
+
+The program makes NO CHANGES to any existing source code on the local machine.
+The VSS working directories are IGNORED.
+
+Once the program is complete, you can copy the projects from the extract path
+to wherever you need them to be.
+
+------------------------------------------------------------------------------
 
 
 ------------------------------------------------------------------------------

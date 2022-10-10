@@ -209,7 +209,7 @@ namespace VSS2Git
             {
                 File.AppendAllText(logFile, message);
             }
-            sbStatus.AppendFormat(message);
+            sbStatus.Append(message);
         }
 
         private void SetStatusLabel(string message)
@@ -974,8 +974,13 @@ namespace VSS2Git
                 // Make sure base path is empty
                 if (Directory.GetFiles(extractPath).Length != 0 || Directory.GetDirectories(extractPath).Length != 0)
                 {
-                    MessageBox.Show("Extract path " + extractPath + " is not empty.  Clean it out and try again.");
-                    return;
+                    if (MessageBox.Show("Extract path " + extractPath + " is not empty.  Delete it?", "Confirm", MessageBoxButtons.YesNo) != DialogResult.Yes)
+                    {
+                        return;
+                    }
+                    Directory.Delete(extractPath, true);
+                    lastCheckPath = "";
+                    CheckPath(extractPath);
                 }
 
                 // Create database instance...
